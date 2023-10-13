@@ -8,6 +8,7 @@ import { LibModule } from './lib/lib.module';
 import { PlayersComponent } from './players/players.component';
 import { PlaysComponent } from './plays/plays.component';
 import { SummaryComponent } from './summary/summary.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,9 @@ import { SummaryComponent } from './summary/summary.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    LibModule ],
+    LibModule,
+    AgGridModule ],
+    
   providers: [],
   bootstrap: [AppComponent]
 })

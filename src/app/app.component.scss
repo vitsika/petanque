@@ -2,10 +2,12 @@
 
 .petanque-content {
     margin: 3vh;
-    border: solid;
-    border-width: 1px;
+    //border: solid;
+    //border-width: 1px;
     border-color: $ds-yellow-90;
     height: 80vh;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    border-radius:5px
 }
 
 .mat-tab-list .mat-tab-labels .mat-tab-label-active {

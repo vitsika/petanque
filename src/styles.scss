@@ -1,5 +1,7 @@
 @import '@angular/material/theming';
 @import './app/lib/colors.scss';
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 @include mat-core();
 
