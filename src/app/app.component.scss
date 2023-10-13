@@ -1,0 +1,22 @@
+@import './lib/colors.scss';
+
+.petanque-content {
+    margin: 3vh;
+    border: solid;
+    border-width: 1px;
+    border-color: $ds-yellow-90;
+    height: 80vh;
+}
+
+.mat-tab-list .mat-tab-labels .mat-tab-label-active {
+    background-color: $ds-orange-60;
+    color: white !important;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.mat-tab-list {
+    .mat-ink-bar {
+        display: none;
+    }
+}
