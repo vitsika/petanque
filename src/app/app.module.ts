@@ -5,10 +5,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { LibModule } from './lib/lib.module';
+import { PlayersComponent } from './players/players.component';
+import { PlaysComponent } from './plays/plays.component';
+import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PlayersComponent,
+    PlaysComponent,
+    SummaryComponent
   ],
   imports: [
     BrowserModule,
