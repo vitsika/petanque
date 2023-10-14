@@ -16,8 +16,8 @@ export class PlayersComponent implements OnInit {
 
   columnDefs: ColDef[] = [
     { headerName: 'Equipe', field: 'team' },
-    { headerName: 'Joueur1', field: 'player1' },
-    { headerName: 'Joueur2', field: 'player2' },
+    { headerName: 'Joueur1', field: 'player1',editable:true },
+    { headerName: 'Joueur2', field: 'player2',editable:true },
     { headerName: 'Parties jouées', field: 'gamePlayed' },
     { headerName: 'Parties gagnées', field: 'win' },
     { headerName: 'Parties perdues', field: 'lost' },
@@ -28,7 +28,8 @@ export class PlayersComponent implements OnInit {
     sortable: true,
     cellStyle: { textAlign: 'center' },
     filter: true,
-    resizable: true
+    resizable: true,
+    editable:false
   };
 
 
@@ -50,6 +51,10 @@ export class PlayersComponent implements OnInit {
 
   onFirstDataRendered(params: any): void {
     params.api.sizeColumnsToFit();
+  }
+
+  onAddPlayer = () => {
+    this.gridApi.applyTransaction({add:[{}]})
   }
 
 
