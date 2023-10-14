@@ -1,12 +1,35 @@
-<ag-grid-angular
-#agGrid
-id="playerGrid"
-style="height: 70vh; margin: 2vw;" 
-class="ag-theme-alpine"
-[rowData]="rowData" 
-[columnDefs]="columnDefs"
-[defaultColDef]="defaultColDef"
-[pagination]="true"
-(gridReady)="onGridReady($event)"
-(firstDataRendered)="onFirstDataRendered($event)">
-</ag-grid-angular>
+
+<div id="player">
+   
+    <div id="grid">
+        <ag-grid-angular
+        #agGrid
+        id="playerGrid"
+        style="height: 70vh; margin: 2vw;" 
+        class="ag-theme-alpine"
+        [rowData]="rowData" 
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [pagination]="true"
+        (gridReady)="onGridReady($event)"
+        (firstDataRendered)="onFirstDataRendered($event)">
+        </ag-grid-angular>
+    </div>
+    <div id="gridController" class="grid-controller">
+        <button mat-icon-button>
+            <mat-icon>person_add</mat-icon>
+        </button> 
+        <button mat-icon-button>
+            <mat-icon>edit</mat-icon>
+        </button> 
+        <button mat-icon-button>
+            <mat-icon>person_remove</mat-icon>
+        </button> 
+        <button mat-icon-button>
+            <mat-icon>delete_sweep</mat-icon>
+        </button> 
+    </div>
+    
+    
+</div>
+
