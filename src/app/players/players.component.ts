@@ -3,6 +3,7 @@ import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid-community';
 import data from '../../data/teams.json';
 import { LocalStorageService } from '../service/localStorage.service';
 import { Team } from '../model/player.model';
+import { PlayerService } from '../service/player.service';
 
 @Component({
   selector: 'app-players',
@@ -35,7 +36,16 @@ export class PlayersComponent implements OnInit {
 
   rowData: Team[] = [];
 
-  constructor(private localStorageService: LocalStorageService) { }
+  constructor(private localStorageService: LocalStorageService, private playerService:PlayerService) { 
+    this.playerService.getTeams().subscribe(teams => {
+      if (teams){
+        this.rowData = teams.allTeams
+      }else{
+        this.rowData = []
+      }
+      
+    })
+  }
 
   ngOnInit(): void {
     var teams =  this.localStorageService.getTeams()
@@ -54,7 +64,37 @@ export class PlayersComponent implements OnInit {
   }
 
   onAddPlayer = () => {
-    this.gridApi.applyTransaction({add:[{}]})
+    var newTeam: Team = {
+      team : -1,
+      player1:"",
+      player2:"",
+      gamePlayed:0,
+      win:0,
+      lost:0,
+      score:0
+    }
+    //get allTeams
+    var teams =  this.localStorageService.getTeams()
+    if (!teams){
+      newTeam.team = 1
+    }else{
+      newTeam.team = this.getMaxTeamNumber(teams.allTeams)+1
+    }
+    this.gridApi.applyTransaction({add:[newTeam]})
+    this.localStorageService.addTeam(newTeam)
+
+  }
+
+
+  onRemoveAll = () => {
+    this.localStorageService.removeAll()
+  }
+  getMaxTeamNumber = (teams:Team[]) => {
+    var array : number[]=[]
+    teams.forEach(team =>{
+      array.push(team.team)
+    }) 
+    return Math.max(...array)
   }
 
 
