@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowValueChangedEvent } from 'ag-grid-community';
 import data from '../../data/teams.json';
 import { LocalStorageService } from '../service/localStorage.service';
-import { Team } from '../model/player.model';
+import { Team, Teams } from '../model/player.model';
 import { PlayerService } from '../service/player.service';
 
 @Component({
@@ -14,9 +14,16 @@ import { PlayerService } from '../service/player.service';
 export class PlayersComponent implements OnInit {
   private gridApi!: GridApi;
   private gridColumnApi!: ColumnApi;
+  public rowSelection: 'single' | 'multiple' = 'multiple';
+
+
+
+ 
+
+
 
   columnDefs: ColDef[] = [
-    { headerName: 'Equipe', field: 'team' },
+    { headerName: 'Equipe', field: 'team', checkboxSelection:true, headerCheckboxSelection:true},
     { headerName: 'Joueur1', field: 'player1',editable:true },
     { headerName: 'Joueur2', field: 'player2',editable:true },
     { headerName: 'Parties jouées', field: 'gamePlayed' },
@@ -35,6 +42,7 @@ export class PlayersComponent implements OnInit {
 
 
   rowData: Team[] = [];
+  
 
   constructor(private localStorageService: LocalStorageService, private playerService:PlayerService) { 
     this.playerService.getTeams().subscribe(teams => {
@@ -88,6 +96,17 @@ export class PlayersComponent implements OnInit {
 
   onRemoveAll = () => {
     this.localStorageService.removeAll()
+  }
+
+  onCellValueChanged(event:CellValueChangedEvent):void {
+    let tmp:Team[]=[]
+    this.gridApi.getRenderedNodes().forEach(node =>{
+      tmp.push(node.data)
+    })
+    var newTeams:Teams = {
+      allTeams :tmp
+    }
+    this.localStorageService?.setTeams(newTeams)
   }
   getMaxTeamNumber = (teams:Team[]) => {
     var array : number[]=[]

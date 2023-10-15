@@ -1,5 +1,5 @@
 export interface Teams {
-    allTeams:[]
+    allTeams:Team[]
   }
 
 export interface Team {

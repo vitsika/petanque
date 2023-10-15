@@ -11,15 +11,14 @@
         [columnDefs]="columnDefs"
         [defaultColDef]="defaultColDef"
         (gridReady)="onGridReady($event)"
+        [rowSelection]="rowSelection"
+        (cellValueChanged)= "onCellValueChanged($event)"
         (firstDataRendered)="onFirstDataRendered($event)">
         </ag-grid-angular>
     </div>
     <div id="gridController" class="grid-controller">
         <button mat-icon-button (click)="onAddPlayer()">
             <mat-icon>person_add</mat-icon>
-        </button> 
-        <button mat-icon-button>
-            <mat-icon>edit</mat-icon>
         </button> 
         <button mat-icon-button>
             <mat-icon>person_remove</mat-icon>
