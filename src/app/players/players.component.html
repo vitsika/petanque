@@ -14,6 +14,7 @@
         [rowSelection]="rowSelection"
         (cellValueChanged)= "onCellValueChanged($event)"
         (cellEditingStopped)="onCellEditingStopped($event)"
+        (selectionChanged)="onSelectionChanged($event)"
         (firstDataRendered)="onFirstDataRendered($event)">
         </ag-grid-angular>
     </div>
@@ -21,10 +22,10 @@
         <button mat-icon-button (click)="onAddPlayer()">
             <mat-icon>person_add</mat-icon>
         </button> 
-        <button mat-icon-button (click)="onRemovePlayer()">
+        <button mat-icon-button (click)="onRemovePlayer()" [disabled]="disableDeletePlayer">
             <mat-icon>person_remove</mat-icon>
         </button> 
-        <button mat-icon-button (click)="onRemoveAll()">
+        <button mat-icon-button (click)="onRemoveAll()" [disabled]="this.rowData.length==0">
             <mat-icon>delete_sweep</mat-icon>
         </button> 
     </div>

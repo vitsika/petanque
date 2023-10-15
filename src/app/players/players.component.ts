@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { CellEditingStoppedEvent, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowEditingStoppedEvent, RowValueChangedEvent } from 'ag-grid-community';
+import { CellEditingStoppedEvent, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowEditingStoppedEvent, RowValueChangedEvent, SelectionChangedEvent } from 'ag-grid-community';
 import data from '../../data/teams.json';
 import { LocalStorageService } from '../service/localStorage.service';
 import { Team, Teams } from '../model/player.model';
 import { PlayerService } from '../service/player.service';
 import { NotificationService } from '../service/notification.service';
 import { NotificationType } from '../model/notificationType';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-players',
@@ -17,8 +20,9 @@ export class PlayersComponent implements OnInit {
   private gridApi!: GridApi;
   private gridColumnApi!: ColumnApi;
   public rowSelection: 'single' | 'multiple' = 'multiple';
+  disableDeletePlayer:boolean=true
 
-
+  
 
 
 
@@ -46,14 +50,13 @@ export class PlayersComponent implements OnInit {
   rowData: Team[] = [];
 
 
-  constructor(private localStorageService: LocalStorageService, private playerService: PlayerService, private notificationService:NotificationService) {
+  constructor(private localStorageService: LocalStorageService, private playerService: PlayerService, private notificationService:NotificationService,private dialog: MatDialog) {
     this.playerService.getTeams().subscribe(teams => {
       if (teams) {
-        this.rowData = teams.allTeams
+        this.rowData = teams.allTeams       
       } else {
-        this.rowData = []
+        this.rowData = []       
       }
-
     })
   }
 
@@ -61,12 +64,14 @@ export class PlayersComponent implements OnInit {
     var teams = this.localStorageService.getTeams()
     if (teams) {
       this.rowData = teams.allTeams
+      this.disableDeletePlayer = false
     }
   }
 
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
+    this.gridColumnApi = params.columnApi;    
+    this.enableDisableRemovePlayer()
   }
 
   onFirstDataRendered(params: any): void {
@@ -92,28 +97,65 @@ export class PlayersComponent implements OnInit {
     }
     this.gridApi.applyTransaction({ add: [newTeam] })
     this.localStorageService.addTeam(newTeam)
-  }
-
-
-  onRemoveAll = () => {
-    this.localStorageService.removeAll()
-  }
-
-  onRemovePlayer = () => {
-    var toRemove = this.gridApi.getSelectedRows()
-    this.gridApi.applyTransaction({ remove: toRemove })
-    this.setNewTeams()
-  }
-
-  onCellValueChanged(event: CellValueChangedEvent): void {
-    this.setNewTeams()
-    console.log(event.newValue)
     
   }
 
 
+  onRemoveAll = () => {    
+    let dialogRef = this.dialog.open(ConfirmModalComponent, {
+      height: 'auto',
+      width: '300px',
+      disableClose:true,
+      data: {
+        title: 'Suppression des équipes',
+        content: 'Voulez-vous vraiment supprimer toutes les équipes ?',
+      },
+    });
+    dialogRef.afterClosed().pipe(first()).subscribe((res) => {
+      if (res === 'confirm') {
+        this.localStorageService.removeAll()
+        this.disableDeletePlayer = true
+      }
+    });
+  }
+
+  onRemovePlayer = () => {
+    let dialogRef = this.dialog.open(ConfirmModalComponent, {
+      height: 'auto',
+      width: '300px',
+      disableClose:true,
+      data: {
+        title: 'Suppression des équipes',
+        content: 'Voulez-vous vraiment supprimer les équipes séléctionées ?',
+      },
+    });
+    dialogRef.afterClosed().pipe(first()).subscribe((res) => {
+      if (res === 'confirm') {
+        this.disableDeletePlayer = false
+        var toRemove = this.gridApi.getSelectedRows()
+        this.gridApi.applyTransaction({ remove: toRemove })
+        this.setNewTeams()
+        if (this.gridApi.getSelectedRows().length==0){
+          this.disableDeletePlayer = true
+        }
+      }
+    });
+
+
+
+    
+  }
+
+  onCellValueChanged(event: CellValueChangedEvent): void {
+    this.setNewTeams()    
+  }
+
+  onSelectionChanged(event: SelectionChangedEvent):void {
+    this.enableDisableRemovePlayer()
+  }
+
+
   onCellEditingStopped(event: CellEditingStoppedEvent) {
-    console.log(event.value)
     if (event.value==""){
       this.notificationService.openNotification({
         message: 'Attention, le nom est vide.',
@@ -142,6 +184,13 @@ export class PlayersComponent implements OnInit {
       this.localStorageService?.removeAll()
     }else{
       this.localStorageService?.setTeams(newTeams)
+    }
+  }
+
+  enableDisableRemovePlayer = () => {
+    this.disableDeletePlayer = false
+    if (this.gridApi.getSelectedRows().length==0){
+      this.disableDeletePlayer = true
     }
   }
 
