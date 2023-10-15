@@ -18,14 +18,14 @@ export class PlayersComponent implements OnInit {
 
 
 
- 
+
 
 
 
   columnDefs: ColDef[] = [
-    { headerName: 'Equipe', field: 'team', checkboxSelection:true, headerCheckboxSelection:true},
-    { headerName: 'Joueur1', field: 'player1',editable:true },
-    { headerName: 'Joueur2', field: 'player2',editable:true },
+    { headerName: 'Equipe', field: 'team', checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: 'Joueur1', field: 'player1', editable: true },
+    { headerName: 'Joueur2', field: 'player2', editable: true },
     { headerName: 'Parties jouées', field: 'gamePlayed' },
     { headerName: 'Parties gagnées', field: 'win' },
     { headerName: 'Parties perdues', field: 'lost' },
@@ -37,29 +37,29 @@ export class PlayersComponent implements OnInit {
     cellStyle: { textAlign: 'center' },
     filter: true,
     resizable: true,
-    editable:false
+    editable: false
   };
 
 
   rowData: Team[] = [];
-  
 
-  constructor(private localStorageService: LocalStorageService, private playerService:PlayerService) { 
+
+  constructor(private localStorageService: LocalStorageService, private playerService: PlayerService) {
     this.playerService.getTeams().subscribe(teams => {
-      if (teams){
+      if (teams) {
         this.rowData = teams.allTeams
-      }else{
+      } else {
         this.rowData = []
       }
-      
+
     })
   }
 
   ngOnInit(): void {
-    var teams =  this.localStorageService.getTeams()
-    if (teams){
+    var teams = this.localStorageService.getTeams()
+    if (teams) {
       this.rowData = teams.allTeams
-    }    
+    }
   }
 
   onGridReady(params: GridReadyEvent): void {
@@ -73,22 +73,22 @@ export class PlayersComponent implements OnInit {
 
   onAddPlayer = () => {
     var newTeam: Team = {
-      team : -1,
-      player1:"",
-      player2:"",
-      gamePlayed:0,
-      win:0,
-      lost:0,
-      score:0
+      team: -1,
+      player1: "",
+      player2: "",
+      gamePlayed: 0,
+      win: 0,
+      lost: 0,
+      score: 0
     }
     //get allTeams
-    var teams =  this.localStorageService.getTeams()
-    if (!teams){
+    var teams = this.localStorageService.getTeams()
+    if (!teams) {
       newTeam.team = 1
-    }else{
-      newTeam.team = this.getMaxTeamNumber(teams.allTeams)+1
+    } else {
+      newTeam.team = this.getMaxTeamNumber(teams.allTeams) + 1
     }
-    this.gridApi.applyTransaction({add:[newTeam]})
+    this.gridApi.applyTransaction({ add: [newTeam] })
     this.localStorageService.addTeam(newTeam)
 
   }
@@ -98,22 +98,32 @@ export class PlayersComponent implements OnInit {
     this.localStorageService.removeAll()
   }
 
-  onCellValueChanged(event:CellValueChangedEvent):void {
-    let tmp:Team[]=[]
-    this.gridApi.getRenderedNodes().forEach(node =>{
+  onRemovePlayer = () => {
+    var toRemove = this.gridApi.getSelectedRows()
+    this.gridApi.applyTransaction({ remove: toRemove })
+    this.setNewTeams()
+  }
+
+  onCellValueChanged(event: CellValueChangedEvent): void {
+    this.setNewTeams()
+  }
+  getMaxTeamNumber = (teams: Team[]) => {
+    var array: number[] = []
+    teams.forEach(team => {
+      array.push(team.team)
+    })
+    return Math.max(...array)
+  }
+
+  setNewTeams = () => {
+    let tmp: Team[] = []
+    this.gridApi.getRenderedNodes().forEach(node => {
       tmp.push(node.data)
     })
-    var newTeams:Teams = {
-      allTeams :tmp
+    var newTeams: Teams = {
+      allTeams: tmp
     }
     this.localStorageService?.setTeams(newTeams)
-  }
-  getMaxTeamNumber = (teams:Team[]) => {
-    var array : number[]=[]
-    teams.forEach(team =>{
-      array.push(team.team)
-    }) 
-    return Math.max(...array)
   }
 
 
