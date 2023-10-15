@@ -13,6 +13,7 @@
         (gridReady)="onGridReady($event)"
         [rowSelection]="rowSelection"
         (cellValueChanged)= "onCellValueChanged($event)"
+        (cellEditingStopped)="onCellEditingStopped($event)"
         (firstDataRendered)="onFirstDataRendered($event)">
         </ag-grid-angular>
     </div>

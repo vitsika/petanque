@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowValueChangedEvent } from 'ag-grid-community';
+import { CellEditingStoppedEvent, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowEditingStoppedEvent, RowValueChangedEvent } from 'ag-grid-community';
 import data from '../../data/teams.json';
 import { LocalStorageService } from '../service/localStorage.service';
 import { Team, Teams } from '../model/player.model';
 import { PlayerService } from '../service/player.service';
+import { NotificationService } from '../service/notification.service';
+import { NotificationType } from '../model/notificationType';
 
 @Component({
   selector: 'app-players',
@@ -44,7 +46,7 @@ export class PlayersComponent implements OnInit {
   rowData: Team[] = [];
 
 
-  constructor(private localStorageService: LocalStorageService, private playerService: PlayerService) {
+  constructor(private localStorageService: LocalStorageService, private playerService: PlayerService, private notificationService:NotificationService) {
     this.playerService.getTeams().subscribe(teams => {
       if (teams) {
         this.rowData = teams.allTeams
@@ -90,7 +92,6 @@ export class PlayersComponent implements OnInit {
     }
     this.gridApi.applyTransaction({ add: [newTeam] })
     this.localStorageService.addTeam(newTeam)
-
   }
 
 
@@ -106,7 +107,21 @@ export class PlayersComponent implements OnInit {
 
   onCellValueChanged(event: CellValueChangedEvent): void {
     this.setNewTeams()
+    console.log(event.newValue)
+    
   }
+
+
+  onCellEditingStopped(event: CellEditingStoppedEvent) {
+    console.log(event.value)
+    if (event.value==""){
+      this.notificationService.openNotification({
+        message: 'Attention, le nom est vide.',
+        actionText: 'Fermer',
+        type: NotificationType.WARNING,
+      })
+    }
+  } 
   getMaxTeamNumber = (teams: Team[]) => {
     var array: number[] = []
     teams.forEach(team => {
