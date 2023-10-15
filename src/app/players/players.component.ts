@@ -123,7 +123,11 @@ export class PlayersComponent implements OnInit {
     var newTeams: Teams = {
       allTeams: tmp
     }
-    this.localStorageService?.setTeams(newTeams)
+    if (newTeams.allTeams.length==0){
+      this.localStorageService?.removeAll()
+    }else{
+      this.localStorageService?.setTeams(newTeams)
+    }
   }
 
 

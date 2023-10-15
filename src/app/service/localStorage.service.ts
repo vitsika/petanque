@@ -38,7 +38,7 @@ export class LocalStorageService {
   }
 
   removeAll(): void {
-    localStorage.removeItem("teams")
+    localStorage.clear()
     this.playerService.setTeams({allTeams:[]})
   }
 
