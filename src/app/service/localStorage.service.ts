@@ -19,7 +19,6 @@ export class LocalStorageService {
       teams.allTeams = []
     }
     teams.allTeams.push(team)
-    console.log(teams)
     localStorage.setItem("teams", JSON.stringify(teams))
     this.playerService.setTeams(teams)
     return teams
