@@ -26,15 +26,8 @@ export class PlayersComponent implements OnInit {
   enableAddPlayer:boolean=true
   enableGenerateGame:boolean=true
 
-
-
-
-
-
-
-
   columnDefs: ColDef[] = [
-    { headerName: 'Equipe', field: 'team', checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: 'Equipe', field: 'team', headerCheckboxSelection: true },
     { headerName: 'Joueur1', field: 'player1', editable: true },
     { headerName: 'Joueur2', field: 'player2', editable: true },
     { headerName: 'Parties jouées', field: 'gamePlayed' },
@@ -48,7 +41,8 @@ export class PlayersComponent implements OnInit {
     cellStyle: { textAlign: 'center' },
     filter: true,
     resizable: true,
-    editable: false
+    editable: false,
+    suppressRowClickSelection:true
   };
 
 
@@ -75,6 +69,7 @@ export class PlayersComponent implements OnInit {
       this.rowData = teams.allTeams
       this.disableDeletePlayer = false
     }
+    
     this.setEnableGame()
   }
 
@@ -82,6 +77,21 @@ export class PlayersComponent implements OnInit {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.enableDisableRemovePlayer()
+    var gameStarted = this.localStorageService.getField("gameStarted")
+    if (gameStarted){
+      this.enableAddPlayer = false
+      this.disableDeletePlayer = true
+      this.enableGametab = false
+      this.enableGameService.setEnable(true)
+      this.columnDefs.forEach((colDef,index) =>{
+        if (colDef.headerName=="Joueur1" || colDef.headerName=="Joueur2" ){
+          colDef.editable=false
+        }
+        colDef.headerCheckboxSelection = false
+      })
+      this.gridApi.setColumnDefs(this.columnDefs)
+      this.gridApi.setSuppressRowClickSelection(true)
+    }
   }
 
   onFirstDataRendered(params: any): void {
@@ -119,14 +129,24 @@ export class PlayersComponent implements OnInit {
       disableClose: true,
       data: {
         title: 'Suppression des équipes',
-        content: 'Voulez-vous vraiment supprimer toutes les équipes ?',
+        content: 'Voulez-vous vraiment supprimer toutes les équipes et annuler les matchs ?',
       },
     });
     dialogRef.afterClosed().pipe(first()).subscribe((res) => {
       if (res === 'confirm') {
         this.localStorageService.removeAll()
-        this.disableDeletePlayer = true
+        this.disableDeletePlayer = true        
+        this.enableAddPlayer = true
+        this.enableGametab = false
+        this.enableGameService.setEnable(false)
         this.setEnableGame()
+        this.columnDefs.forEach((colDef,index) =>{
+          if (colDef.headerName=="Joueur1" || colDef.headerName=="Joueur2" ){
+            colDef.editable=true
+          }
+        })
+        this.gridApi.setColumnDefs(this.columnDefs)
+        this.gridApi.setSuppressRowClickSelection(false)
       }
     });
 
@@ -178,8 +198,16 @@ export class PlayersComponent implements OnInit {
           if (colDef.headerName=="Joueur1" || colDef.headerName=="Joueur2" ){
             colDef.editable=false
           }
+          colDef.headerCheckboxSelection = false
         })
         this.gridApi.setColumnDefs(this.columnDefs)
+        this.gridApi.setSuppressRowClickSelection(true)
+        this.notificationService.openNotification({
+          message: 'Vous pouver maintenant démarrer les parties dans l\'onglet \"PARTIES\"',
+          actionText: 'Fermer',
+          type: NotificationType.SUCCESS,
+        })
+        this.localStorageService.setField("gameStarted", true)
       }
     });
    

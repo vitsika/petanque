@@ -35,3 +35,25 @@ body {
 div {
   font-family: Roboto, sans-serif;
 }
+
+.error-notification {
+  background: $ds-red-50;
+  .mat-simple-snackbar-action {
+    color: white !important;
+}
+}
+
+.warning-notification {
+  background: $ds-orange-70;
+  .mat-simple-snackbar-action {
+    color: white !important;
+}
+}
+
+.success-notification {
+  background: $ds-green-60;
+}
+
+.info-notification {
+  background: $ds-cool-grey-90;
+}
