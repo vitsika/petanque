@@ -9,6 +9,7 @@ import { NotificationType } from '../model/notificationType';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { first } from 'rxjs';
+import { EnableGameService } from '../service/enable-game.service';
 
 @Component({
   selector: 'app-players',
@@ -20,9 +21,9 @@ export class PlayersComponent implements OnInit {
   private gridApi!: GridApi;
   private gridColumnApi!: ColumnApi;
   public rowSelection: 'single' | 'multiple' = 'multiple';
-  disableDeletePlayer:boolean=true
+  disableDeletePlayer: boolean = true
 
-  
+
 
 
 
@@ -50,12 +51,16 @@ export class PlayersComponent implements OnInit {
   rowData: Team[] = [];
 
 
-  constructor(private localStorageService: LocalStorageService, private playerService: PlayerService, private notificationService:NotificationService,private dialog: MatDialog) {
+  constructor(private localStorageService: LocalStorageService,
+    private playerService: PlayerService,
+    private notificationService: NotificationService,
+    private dialog: MatDialog,
+    private enableGameService: EnableGameService) {
     this.playerService.getTeams().subscribe(teams => {
       if (teams) {
-        this.rowData = teams.allTeams       
+        this.rowData = teams.allTeams
       } else {
-        this.rowData = []       
+        this.rowData = []
       }
     })
   }
@@ -70,7 +75,7 @@ export class PlayersComponent implements OnInit {
 
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;    
+    this.gridColumnApi = params.columnApi;
     this.enableDisableRemovePlayer()
   }
 
@@ -97,15 +102,16 @@ export class PlayersComponent implements OnInit {
     }
     this.gridApi.applyTransaction({ add: [newTeam] })
     this.localStorageService.addTeam(newTeam)
-    
+    this.setEnableGame()
+
   }
 
 
-  onRemoveAll = () => {    
+  onRemoveAll = () => {
     let dialogRef = this.dialog.open(ConfirmModalComponent, {
       height: 'auto',
       width: '300px',
-      disableClose:true,
+      disableClose: true,
       data: {
         title: 'Suppression des équipes',
         content: 'Voulez-vous vraiment supprimer toutes les équipes ?',
@@ -115,15 +121,17 @@ export class PlayersComponent implements OnInit {
       if (res === 'confirm') {
         this.localStorageService.removeAll()
         this.disableDeletePlayer = true
+        this.setEnableGame()
       }
     });
+
   }
 
   onRemovePlayer = () => {
     let dialogRef = this.dialog.open(ConfirmModalComponent, {
       height: 'auto',
       width: '300px',
-      disableClose:true,
+      disableClose: true,
       data: {
         title: 'Suppression des équipes',
         content: 'Voulez-vous vraiment supprimer les équipes séléctionées ?',
@@ -135,35 +143,36 @@ export class PlayersComponent implements OnInit {
         var toRemove = this.gridApi.getSelectedRows()
         this.gridApi.applyTransaction({ remove: toRemove })
         this.setNewTeams()
-        if (this.gridApi.getSelectedRows().length==0){
+        if (this.gridApi.getSelectedRows().length == 0) {
           this.disableDeletePlayer = true
         }
+        this.setEnableGame()
       }
     });
 
 
-
-    
   }
 
   onCellValueChanged(event: CellValueChangedEvent): void {
-    this.setNewTeams()    
+    this.setNewTeams()
   }
 
-  onSelectionChanged(event: SelectionChangedEvent):void {
+  onSelectionChanged(event: SelectionChangedEvent): void {
     this.enableDisableRemovePlayer()
   }
 
 
   onCellEditingStopped(event: CellEditingStoppedEvent) {
-    if (event.value==""){
+    if (event.value == "") {
       this.notificationService.openNotification({
         message: 'Attention, le nom est vide.',
         actionText: 'Fermer',
         type: NotificationType.WARNING,
       })
     }
-  } 
+    this.setEnableGame()
+
+  }
   getMaxTeamNumber = (teams: Team[]) => {
     var array: number[] = []
     teams.forEach(team => {
@@ -180,18 +189,37 @@ export class PlayersComponent implements OnInit {
     var newTeams: Teams = {
       allTeams: tmp
     }
-    if (newTeams.allTeams.length==0){
+    if (newTeams.allTeams.length == 0) {
       this.localStorageService?.removeAll()
-    }else{
+    } else {
       this.localStorageService?.setTeams(newTeams)
     }
   }
 
   enableDisableRemovePlayer = () => {
     this.disableDeletePlayer = false
-    if (this.gridApi.getSelectedRows().length==0){
+    if (this.gridApi.getSelectedRows().length == 0) {
       this.disableDeletePlayer = true
     }
+  }
+
+  setEnableGame = () => {
+    var allNodes = this.gridApi.getRenderedNodes()
+    var emptyName: boolean = false
+    var enableGame: boolean = false
+    var teams = this.localStorageService.getTeams()
+    if (teams) {
+      teams.allTeams.forEach(node => {
+        var team = node
+        if (team.player1.trim() == "" || team.player2.trim() == "") {
+          emptyName = true
+        }
+      })
+      if (allNodes.length > 2 && !emptyName) {
+        enableGame = true
+      }
+    }
+    this.enableGameService.setEnable(enableGame)
   }
 
 
