@@ -15,7 +15,7 @@ export class AppComponent {
   constructor(
     private enableGameService: EnableGameService) {
     this.enableGameService.isEnable().subscribe((enable)=> {
-      this.enableGames = !enable
+      this.enableGames = enable
     })
   }
 }

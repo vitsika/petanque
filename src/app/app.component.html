@@ -1,7 +1,7 @@
 <div class="petanque-content">
 <mat-tab-group  backgroundColor="primary">
   <mat-tab label="Joueurs"> <app-players></app-players> </mat-tab>
-  <mat-tab label="Parties" [disabled]="enableGames"> <app-plays></app-plays> </mat-tab>
+  <mat-tab label="Parties" [disabled]="!enableGames"> <app-plays></app-plays> </mat-tab>
   <mat-tab label="Résumé" disabled> <app-summary></app-summary> </mat-tab>
 </mat-tab-group>
 </div>

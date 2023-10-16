@@ -22,6 +22,10 @@ export class PlayersComponent implements OnInit {
   private gridColumnApi!: ColumnApi;
   public rowSelection: 'single' | 'multiple' = 'multiple';
   disableDeletePlayer: boolean = true
+  enableGametab:boolean=false
+  enableAddPlayer:boolean=true
+  enableGenerateGame:boolean=true
+
 
 
 
@@ -71,6 +75,7 @@ export class PlayersComponent implements OnInit {
       this.rowData = teams.allTeams
       this.disableDeletePlayer = false
     }
+    this.setEnableGame()
   }
 
   onGridReady(params: GridReadyEvent): void {
@@ -153,6 +158,33 @@ export class PlayersComponent implements OnInit {
 
   }
 
+  onGenerateGames = () => {    
+    let dialogRef = this.dialog.open(ConfirmModalComponent, {
+      height: 'auto',
+      width: '300px',
+      disableClose: true,
+      data: {
+        title: 'Tirage',
+        content: 'Voulez vous démarrer le tirage au sort? Attention, après cette action aucun ajout ou modification des équipes n\'est possible',
+      },
+    });
+    dialogRef.afterClosed().pipe(first()).subscribe((res) => {
+      if (res === 'confirm') {
+        this.enableAddPlayer = false
+        this.disableDeletePlayer = true
+        this.enableGenerateGame = false
+        this.enableGameService.setEnable(this.enableGametab)
+        this.columnDefs.forEach((colDef,index) =>{
+          if (colDef.headerName=="Joueur1" || colDef.headerName=="Joueur2" ){
+            colDef.editable=false
+          }
+        })
+        this.gridApi.setColumnDefs(this.columnDefs)
+      }
+    });
+   
+  }
+
   onCellValueChanged(event: CellValueChangedEvent): void {
     this.setNewTeams()
   }
@@ -204,7 +236,6 @@ export class PlayersComponent implements OnInit {
   }
 
   setEnableGame = () => {
-    var allNodes = this.gridApi.getRenderedNodes()
     var emptyName: boolean = false
     var enableGame: boolean = false
     var teams = this.localStorageService.getTeams()
@@ -215,11 +246,11 @@ export class PlayersComponent implements OnInit {
           emptyName = true
         }
       })
-      if (allNodes.length > 2 && !emptyName) {
+      if (teams.allTeams.length > 2 && !emptyName) {
         enableGame = true
       }
     }
-    this.enableGameService.setEnable(enableGame)
+    this.enableGametab = enableGame
   }
 
 

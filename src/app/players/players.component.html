@@ -19,14 +19,17 @@
         </ag-grid-angular>
     </div>
     <div id="gridController" class="grid-controller">
-        <button mat-icon-button (click)="onAddPlayer()">
+        <button matTooltip="Ajouter une équipe" mat-icon-button (click)="onAddPlayer()"[disabled]="!enableAddPlayer">
             <mat-icon>person_add</mat-icon>
         </button> 
-        <button mat-icon-button (click)="onRemovePlayer()" [disabled]="disableDeletePlayer">
+        <button mat-icon-button matTooltip="Supprimer une équipe" (click)="onRemovePlayer()" [disabled]="disableDeletePlayer">
             <mat-icon>person_remove</mat-icon>
         </button> 
-        <button mat-icon-button (click)="onRemoveAll()" [disabled]="this.rowData.length==0">
+        <button mat-icon-button matTooltip="Supprimer toutes les équipes" (click)="onRemoveAll()" [disabled]="this.rowData.length==0">
             <mat-icon>delete_sweep</mat-icon>
+        </button> 
+        <button matTooltip="Générer les parties" (click) = "onGenerateGames()" mat-icon-button [disabled]="!enableGametab || !enableGenerateGame">
+            <mat-icon>play_circle_filled</mat-icon>
         </button> 
     </div>
     
