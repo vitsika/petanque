@@ -1,15 +1,19 @@
 import { Injectable, Injector, OnDestroy } from '@angular/core';
 import { Team, Teams } from '../model/player.model';
 import { PlayerService } from './player.service';
+import { TournamentResult } from '../model/tournamentResult';
+import { TournamentService } from './tournament.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageService {
   private playerService!: PlayerService
+  private tournamentService!: TournamentService
 
   constructor(private injector: Injector) {
     this.playerService = injector.get<PlayerService>(PlayerService)
+    this.tournamentService = injector.get<TournamentService>(TournamentService)
   }
 
   addTeam(team: Team): Teams {
@@ -47,6 +51,11 @@ export class LocalStorageService {
 
   setField(name: string,value: boolean): void {
     localStorage.setItem(name, JSON.stringify(value))
+  }
+
+  saveGameResults(gameResults:TournamentResult): void {
+    localStorage.setItem("tournament", JSON.stringify(gameResults))
+    this.tournamentService.setTournamentResult(gameResults)
   }
 
 }

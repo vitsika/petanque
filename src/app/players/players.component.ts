@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CellEditingStoppedEvent, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowEditingStoppedEvent, RowValueChangedEvent, SelectionChangedEvent } from 'ag-grid-community';
-import data from '../../data/teams.json';
 import { LocalStorageService } from '../service/localStorage.service';
 import { Team, Teams } from '../model/player.model';
 import { PlayerService } from '../service/player.service';
@@ -10,6 +9,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { first } from 'rxjs';
 import { EnableGameService } from '../service/enable-game.service';
+import { TeamService } from '../service/team.service';
+import { TournamentResult } from '../model/tournamentResult';
+import { GameService } from '../service/game.service';
 
 @Component({
   selector: 'app-players',
@@ -42,7 +44,6 @@ export class PlayersComponent implements OnInit {
     filter: true,
     resizable: true,
     editable: false,
-    suppressRowClickSelection:true
   };
 
 
@@ -53,7 +54,8 @@ export class PlayersComponent implements OnInit {
     private playerService: PlayerService,
     private notificationService: NotificationService,
     private dialog: MatDialog,
-    private enableGameService: EnableGameService) {
+    private enableGameService: EnableGameService,
+    private gameService:GameService) {
     this.playerService.getTeams().subscribe(teams => {
       if (teams) {
         this.rowData = teams.allTeams
@@ -208,10 +210,14 @@ export class PlayersComponent implements OnInit {
           type: NotificationType.SUCCESS,
         })
         this.localStorageService.setField("gameStarted", true)
+        this.gameService.initFirstGame()
+
       }
     });
    
   }
+
+  
 
   onCellValueChanged(event: CellValueChangedEvent): void {
     this.setNewTeams()
@@ -274,7 +280,7 @@ export class PlayersComponent implements OnInit {
           emptyName = true
         }
       })
-      if (teams.allTeams.length > 2 && !emptyName) {
+      if (teams.allTeams.length > 5 && !emptyName) {
         enableGame = true
       }
     }
