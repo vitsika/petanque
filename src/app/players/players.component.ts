@@ -211,9 +211,9 @@ export class PlayersComponent implements OnInit {
           type: NotificationType.SUCCESS,
         })
         this.localStorageService.setField("gameStarted", true)
+        this.gameService.initFirstGame()
         this.localStorageService.setField("gameStep", Object.keys(GameEnum)[0])
         this.gameService.setStep(Object.keys(GameEnum)[0])
-        this.gameService.initFirstGame()
 
 
       }

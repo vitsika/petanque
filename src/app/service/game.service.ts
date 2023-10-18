@@ -56,7 +56,8 @@ export class GameService {
         team2:{
           teamId:-99,
           score:0
-        }  
+        },
+        gameOver:true  
       }
       gameResults.game1!.games?.push(exemptedGame)
     }

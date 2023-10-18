@@ -1,13 +1,13 @@
-<mat-card class="card-play">
+<mat-card [ngClass]="game.gameOver?'card-play-over':'card-play'">
     <mat-form-field appearance="outline">
         <mat-label>Equipe {{game.team1!.teamId!}}</mat-label>
-        <input matInput placeholder="Score" [value]="game.team1!.score!">
+        <input matInput placeholder="Score" [value]="game.team1!.score!" [disabled]="game.gameOver">
     </mat-form-field>
     <mat-form-field appearance="outline">
         <mat-label>Equipe {{game.team2!.teamId!}}</mat-label>
-        <input matInput placeholder="Score" [value]="game.team2!.score!">
+        <input matInput placeholder="Score" [value]="game.team2!.score!" [disabled]="game.gameOver">
     </mat-form-field>
     <mat-card-actions align="end">
-        <button  mat-raised-button color="accent"> VALIDER </button>
+        <button  mat-raised-button color="accent" [disabled]="game.gameOver"> VALIDER </button>
     </mat-card-actions>
 </mat-card>

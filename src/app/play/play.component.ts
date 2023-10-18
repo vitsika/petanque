@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Game } from '../model/tournamentResult';
+import { LocalStorageService } from '../service/localStorage.service';
 
 @Component({
   selector: 'app-play',
@@ -8,9 +9,17 @@ import { Game } from '../model/tournamentResult';
 })
 export class PlayComponent implements OnInit {
   @Input() game!: Game
-  constructor() { }
+  @Input() selectedStep!: string
+  done:boolean=false
+  constructor(private localStorageService:LocalStorageService) {
+   
+   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {   
+    var currentStep =  this.localStorageService.getField("gameStep")
+    if (currentStep!=this.selectedStep){
+      this.game.gameOver=true
+    }
   }
 
 }

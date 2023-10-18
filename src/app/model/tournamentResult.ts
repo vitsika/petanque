@@ -23,7 +23,8 @@ export interface Game {
     team2?:{
         teamId:number,
         score:number
-    }
+    },
+    gameOver:boolean
 }
 
 
