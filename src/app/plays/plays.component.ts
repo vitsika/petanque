@@ -22,7 +22,6 @@ export class PlaysComponent implements OnInit {
     this.allTeams = this.localStorageService.getTeams().allTeams
     this.tournament = this.localStorageService.getField("tournament")
     this.gameStep = this.localStorageService.getField("gameStep")
-    console.log(this.gameStep)
     if (this.gameStep){
       this.games = this.tournament = this.localStorageService.getField("tournament")[this.gameStep]!.games
       this.setDefaultStep(this.gameStep)
@@ -43,7 +42,6 @@ export class PlaysComponent implements OnInit {
   }
 
   onGameChange(event:any){
-    console.log(event.value)
   }
 
   setDefaultStep =  (step:string) => {
