@@ -12,6 +12,7 @@ import { EnableGameService } from '../service/enable-game.service';
 import { TeamService } from '../service/team.service';
 import { TournamentResult } from '../model/tournamentResult';
 import { GameService } from '../service/game.service';
+import { GameEnum } from '../model/game.enum';
 
 @Component({
   selector: 'app-players',
@@ -210,7 +211,10 @@ export class PlayersComponent implements OnInit {
           type: NotificationType.SUCCESS,
         })
         this.localStorageService.setField("gameStarted", true)
+        this.localStorageService.setField("gameStep", Object.keys(GameEnum)[0])
+        this.gameService.setStep(Object.keys(GameEnum)[0])
         this.gameService.initFirstGame()
+
 
       }
     });

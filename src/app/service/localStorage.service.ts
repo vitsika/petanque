@@ -45,11 +45,11 @@ export class LocalStorageService {
     this.playerService.setTeams({allTeams:[]})
   }
 
-  getField(name:string): boolean {
+  getField(name:string): any {
     return JSON.parse(localStorage.getItem(name)!)
   }
 
-  setField(name: string,value: boolean): void {
+  setField(name: string,value: any): void {
     localStorage.setItem(name, JSON.stringify(value))
   }
 

@@ -2,15 +2,33 @@ import { Injectable } from '@angular/core';
 import { LocalStorageService } from './localStorage.service';
 import { TeamService } from './team.service';
 import { Game, TournamentResult } from '../model/tournamentResult';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
 
+
+  private stepSubject: BehaviorSubject<string> = new BehaviorSubject<string>(
+    ""
+  );
+
   constructor(private localStorageService: LocalStorageService,
     private teamService: TeamService
     ) { }
+
+
+
+
+
+    getStep(): Observable<string>{
+      return this.stepSubject.asObservable()
+    }
+    setStep(step:string) : void {
+      this.stepSubject.next(step)
+    }
+
 
   initFirstGame = () => {
     var gameResults:TournamentResult={

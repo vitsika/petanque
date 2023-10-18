@@ -1,11 +1,11 @@
 <mat-card class="card-play">
     <mat-form-field appearance="outline">
-        <mat-label>Equipe 1</mat-label>
-        <input matInput placeholder="Score">
+        <mat-label>Equipe {{game.team1!.teamId!}}</mat-label>
+        <input matInput placeholder="Score" [value]="game.team1!.score!">
     </mat-form-field>
     <mat-form-field appearance="outline">
-        <mat-label>Equipe 2</mat-label>
-        <input matInput placeholder="Score">
+        <mat-label>Equipe {{game.team2!.teamId!}}</mat-label>
+        <input matInput placeholder="Score" [value]="game.team2!.score!">
     </mat-form-field>
     <mat-card-actions align="end">
         <button  mat-raised-button color="accent"> VALIDER </button>

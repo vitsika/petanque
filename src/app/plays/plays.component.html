@@ -1,7 +1,19 @@
 
-<div *ngFor="let t of test">
-    <app-play></app-play>
+<div>
+    <mat-form-field  appearance="outline">
+        <mat-label>PARTIE</mat-label>
+        <mat-select [value]="defaultStep"  (selectionChange)="onGameChange($event)">
+          <mat-option *ngFor="let step of gameSteps" [value]="step">{{step}}</mat-option>         
+        </mat-select>
+      </mat-form-field>
 </div>
+
+<div class="game-component">
+    <div *ngFor="let game of games">
+        <app-play [game]="game"></app-play>
+    </div>
+</div>
+
 
 
 
