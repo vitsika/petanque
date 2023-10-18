@@ -10,6 +10,8 @@ import { PlaysComponent } from './plays/plays.component';
 import { SummaryComponent } from './summary/summary.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
+import {MatCardModule} from '@angular/material/card';
+import { PlayComponent } from './play/play.component';
 
 @NgModule({
   declarations: [
@@ -17,13 +19,15 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
     PlayersComponent,
     PlaysComponent,
     SummaryComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    PlayComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     LibModule,
-    AgGridModule ],
+    AgGridModule,
+    MatCardModule ],
     
   providers: [],
   bootstrap: [AppComponent]
