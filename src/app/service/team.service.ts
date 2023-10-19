@@ -85,7 +85,9 @@ export class TeamService {
           teamId:this.getTeamById(teamsId[i+1]).team,
           score:0
         },
-        gameOver:false
+        gameOver:false,
+        locked:false,
+        winner:-1
       }
       games.push(game)
     }

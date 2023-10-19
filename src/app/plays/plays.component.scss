@@ -11,4 +11,12 @@
 .game-component{
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.next-game{
+    position: absolute;
+    top:3vh;
+    right:3vh
 }

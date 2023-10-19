@@ -104,8 +104,8 @@ export class PlayersComponent implements OnInit {
   onAddPlayer = () => {
     var newTeam: Team = {
       team: -1,
-      player1: "",
-      player2: "",
+      player1: "a",
+      player2: "a",
       gamePlayed: 0,
       win: 0,
       lost: 0,

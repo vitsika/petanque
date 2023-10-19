@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from './localStorage.service';
 import { TeamService } from './team.service';
-import { Game, TournamentResult } from '../model/tournamentResult';
+import { Game, GameRecap, TournamentResult } from '../model/tournamentResult';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { TournamentService } from './tournament.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class GameService {
   );
 
   constructor(private localStorageService: LocalStorageService,
-    private teamService: TeamService
+    private teamService: TeamService, private tournamentService: TournamentService
     ) { }
 
 
@@ -57,12 +58,34 @@ export class GameService {
           teamId:-99,
           score:0
         },
-        gameOver:true  
+        gameOver:true, 
+        locked:true,
+        winner:exemptTeamId  
       }
       gameResults.game1!.games?.push(exemptedGame)
     }
 
     this.localStorageService.saveGameResults(gameResults)
+  }
+
+
+  updateData = (game:Game, step:string) => {
+    var tournamentResult:TournamentResult = this.localStorageService.getField("tournament")
+    var teams = this.localStorageService.getField("teams")
+    //update tournament game
+    var winnerId = game.team1!.score>game.team2!.score?game.team1!.teamId:game.team2!.score
+    type ObjectKey = keyof typeof tournamentResult;
+    // @ts-ignore
+    var gameStepObject = tournamentResult[step] as GameRecap
+    var games = gameStepObject.games
+    console.log(games, game)
+    var index = games!.findIndex(g => g.team1!.teamId==game.team1!.teamId&&g.team2!.teamId==game.team2!.teamId);
+    games![index]=game
+    gameStepObject.games = games
+    // @ts-ignore
+    tournamentResult[step] = gameStepObject
+    this.localStorageService.saveGameResults(tournamentResult)
+    //console.log(tournamentResult)
   }
  
 

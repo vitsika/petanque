@@ -24,7 +24,9 @@ export interface Game {
         teamId:number,
         score:number
     },
-    gameOver:boolean
+    gameOver:boolean,
+    locked:boolean,
+    winner:number
 }
 
 

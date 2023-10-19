@@ -5,7 +5,8 @@
     //border: solid;
     //border-width: 1px;
     border-color: $ds-yellow-90;
-    height: 90vh;
+    height: auto;
+    width: auto;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
     border-radius:5px
 }
@@ -24,6 +25,9 @@
     }
 }
 
+.mat-tab-body-wrapper{
+    height: 85vh;
+}
 .plays-component{
     display: flex;
     flex-direction: column;
