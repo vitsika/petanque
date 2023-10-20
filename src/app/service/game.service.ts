@@ -78,14 +78,12 @@ export class GameService {
     // @ts-ignore
     var gameStepObject = tournamentResult[step] as GameRecap
     var games = gameStepObject.games
-    console.log(games, game)
     var index = games!.findIndex(g => g.team1!.teamId==game.team1!.teamId&&g.team2!.teamId==game.team2!.teamId);
     games![index]=game
     gameStepObject.games = games
     // @ts-ignore
     tournamentResult[step] = gameStepObject
     this.localStorageService.saveGameResults(tournamentResult)
-    //console.log(tournamentResult)
   }
  
 

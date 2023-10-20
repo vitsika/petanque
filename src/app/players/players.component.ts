@@ -286,6 +286,7 @@ export class PlayersComponent implements OnInit {
       })
       if (teams.allTeams.length > 5 && !emptyName) {
         enableGame = true
+        this.enableGenerateGame = true
       }
     }
     this.enableGametab = enableGame

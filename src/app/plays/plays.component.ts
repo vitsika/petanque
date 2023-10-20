@@ -33,7 +33,6 @@ export class PlaysComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.gameServiceSub$ =  this.gameService.getStep().subscribe((step) => {
-      console.log("gameServiceSub")
       this.gameStep = step 
       if (step){
         this.games = this.tournament = this.localStorageService.getField("tournament")[step]!.games
@@ -42,7 +41,6 @@ export class PlaysComponent implements OnInit, OnDestroy {
       }
     })
     this.tournamentServiceSub$ = this.tournamentService.getTournamentResult().subscribe((tournamentResult:TournamentResult) =>{
-      console.log("tournamentServiceSub")
       this.setNextButton(this.localStorageService.getField("tournament"))
     })
     if (this.localStorageService.getTeams()) {
@@ -89,8 +87,6 @@ export class PlaysComponent implements OnInit, OnDestroy {
       var games = this.localStorageService.getField("tournament")[this.gameStep]!.games
       var isAllOver =  this.isAllGameOver(games)
       var isAllLocked =  this.isAllGameLocked(games)
-      console.log("isAllOver", isAllOver)
-      console.log("isAllLocked", isAllLocked)
       if (isAllOver){
         this.disableNextButton = true
       }else{
