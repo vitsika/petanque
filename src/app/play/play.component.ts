@@ -70,7 +70,7 @@ export class PlayComponent implements OnInit, OnDestroy {
       this.game.locked=!this.game.locked
       this.buttonLabel = this.game.locked?"MODIFIER":"VALIDER"
       this.game.winner = this.game.team1!.score>this.game.team2!.score?this.game.team1!.teamId:this.game.team2!.teamId
-      this.gameService.updateData(this.game,currentStep)
+      this.gameService.updateTournament(this.game,currentStep)
     }
 
   } 

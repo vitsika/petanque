@@ -1,11 +1,11 @@
 <mat-card [ngClass]="setClass()">
     <mat-form-field appearance="outline">
         <mat-label>Equipe {{game.team1!.teamId!}}</mat-label>
-        <input type="number" min="0" max="13" matInput placeholder="Score" [value]="game.team1!.score!" [disabled]="game.gameOver || game.locked" [(ngModel)]="game.team1!.score">
+        <input  (keydown.enter)="onCLickButton()" type="number" min="0" max="13" matInput placeholder="Score" [value]="game.team1!.score!" [disabled]="game.gameOver || game.locked" [(ngModel)]="game.team1!.score">
     </mat-form-field>
     <mat-form-field appearance="outline">
         <mat-label>Equipe {{game.team2!.teamId!}}</mat-label>
-        <input  type="number" min="0" max="13" matInput placeholder="Score" [value]="game.team2!.score!" [disabled]="game.gameOver || game.locked"  [(ngModel)]="game.team2!.score">
+        <input  (keydown.enter)="onCLickButton()" type="number" min="0" max="13" matInput placeholder="Score" [value]="game.team2!.score!" [disabled]="game.gameOver || game.locked"  [(ngModel)]="game.team2!.score">
     </mat-form-field>
     <mat-card-actions align="end">
         <button  mat-raised-button color="accent" [disabled]="game.gameOver" (click)="onCLickButton()"> {{buttonLabel}} </button>

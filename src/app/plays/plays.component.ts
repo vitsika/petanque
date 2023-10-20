@@ -94,6 +94,7 @@ export class PlaysComponent implements OnInit, OnDestroy {
           this.disableNextButton = true
         }
       }
+    
       
     } 
   }
@@ -129,8 +130,10 @@ export class PlaysComponent implements OnInit, OnDestroy {
       var games = this.localStorageService.getField("tournament")[this.gameStep]!.games
       games.forEach((game:Game)=>{
         game.gameOver = true
-        this.gameService.updateData(game,this.gameStep)
+        tournament = this.gameService.updateTournament(game,this.gameStep)      
       })
+      this.gameService.updateTeams(tournament, this.gameStep)
+      this.gameService.updateTournamentWinArray(tournament)
     }
   }
 

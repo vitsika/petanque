@@ -32,6 +32,22 @@ export class TeamService {
     return teams [Math.floor(Math.random()*teams.length)];
   }
 
+
+  extractExemptedTeam(games:Game[]): any{
+   var exemptedId = 0
+   games.forEach((game:Game)=>{
+    if (game.team1!.teamId==-99){
+      exemptedId = game.team2!.teamId
+    }else if (game.team2!.teamId==-99){
+      exemptedId = game.team1!.teamId
+    }
+   })
+   if (exemptedId!=0){
+      return this.getTeamById(exemptedId)
+   }
+   return {}
+  }
+
   shuffleTeams(teams:number[]):number[] {
     for (let i = teams.length - 1; i > 0; i--) { 
       const j = Math.floor(Math.random() * (i + 1)); 
@@ -76,25 +92,73 @@ export class TeamService {
   buildMatch(teamsId:number[]):Game[]{
     var games: Game[] = []   
     for (let i=0;i<teamsId.length-1;i+=2){
+      var team1Id = teamsId[i]==-99?-99:this.getTeamById(teamsId[i]).team
+      var team2Id = teamsId[i+1]==-99?-99:this.getTeamById(teamsId[i+1]).team
+      var gameOver = false
+      var locked = (teamsId[i]==-99||teamsId[i+1]==-99)?true:false
+      var team1Score = teamsId[i+1]==-99?13:0
+      var team2Score = teamsId[i]==-99?13:0
+      if ( teamsId[i]==-99 || teamsId[i+1]==-99){
+        gameOver = true
+      }
+      var winner = -1
+      if ( teamsId[i]==-99){
+        winner = teamsId[i+1]
+      }
+      if ( teamsId[i+1]==-99){
+        winner = teamsId[i]
+      }
+
       var game:Game = {
         team1: {
-          teamId:this.getTeamById(teamsId[i]).team,
-          score:0
+          teamId:team1Id,
+          score:team1Score
         },
         team2:{
-          teamId:this.getTeamById(teamsId[i+1]).team,
-          score:0
+          teamId:team2Id,
+          score:team2Score
         },
-        gameOver:false,
-        locked:false,
-        winner:-1
+        gameOver:gameOver,
+        locked:locked,
+        winner:winner
       }
       games.push(game)
     }
-
     return games
   }
 
+  updateScoreTeam = (teamId:number, teams:Team[], score:number) => {
+    teams.forEach((team:Team) => {
+      if (team.team==teamId){
+        team.score+=score
+      }
+    })
+    return teams
+  }
+
+  updateWinTeam = (teamId:number, teams:Team[]) => {
+    teams.forEach((team:Team) => {
+      if (team.team==teamId){
+        team.win+=1
+      }
+    })
+    return teams
+  }
+  updateLostTeam = (teamId:number, teams:Team[]) => {
+    teams.forEach((team:Team) => {
+      if (team.team==teamId){
+        team.lost+=1
+      }
+    })
+    return teams
+  }
+
+  updateGamePlayedTeam = (teams:Team[]) => {
+    teams.forEach((team:Team) => {
+        team.gamePlayed+=1
+    })
+    return teams
+  }
 
 
 
