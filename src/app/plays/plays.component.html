@@ -10,12 +10,12 @@
 
 <div class="game-component">
     <div *ngFor="let game of games;let indexOfelement=index;">
-        <app-play [game]="game" [selectedStep]="selectedStep" [index]="indexOfelement+1" ></app-play>
+        <app-play [game]="game" [selectedStep]="selectedStep" [index]="indexOfelement" ></app-play>
     </div>
 </div>
 
 <div class="next-game">
-  <button mat-fab color="accent" [disabled]="disableNextButton" (click)="goNext()">
+  <button mat-fab color="accent" [disabled]="disableNextButton" (click)="goNext()"  matTooltip="MATCH SUIVANT">
     <mat-icon>start</mat-icon>
   </button>
 </div>
