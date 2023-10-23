@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class PlayComponent implements OnInit, OnDestroy {
   @Input() game!: Game
+  @Input() index!: number
   @Input() selectedStep!: string
   buttonLabel="VALIDER"
   cssClass="card-play"

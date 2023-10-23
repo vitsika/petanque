@@ -19,28 +19,28 @@ export class PlaysComponent implements OnInit, OnDestroy {
   gameStep: string = ""
   games = []
   defaultStep = <any>""
-  selectedStep:string =""
+  selectedStep: string = ""
   disableNextButton = false
-  gameServiceSub$!:Subscription
-  tournamentServiceSub$!:Subscription
+  gameServiceSub$!: Subscription
+  tournamentServiceSub$!: Subscription
 
 
-  constructor(private localStorageService: LocalStorageService, private gameService: GameService, private tournamentService:TournamentService ) {
-  
+  constructor(private localStorageService: LocalStorageService, private gameService: GameService, private tournamentService: TournamentService) {
+
 
 
   }
 
   ngOnInit(): void {
-    this.gameServiceSub$ =  this.gameService.getStep().subscribe((step) => {
-      this.gameStep = step 
-      if (step){
+    this.gameServiceSub$ = this.gameService.getStep().subscribe((step) => {
+      this.gameStep = step
+      if (step) {
         this.games = this.tournament = this.localStorageService.getField("tournament")[step]!.games
         this.setDefaultStep(step)
         this.setNextButton(this.localStorageService.getField("tournament"))
       }
     })
-    this.tournamentServiceSub$ = this.tournamentService.getTournamentResult().subscribe((tournamentResult:TournamentResult) =>{
+    this.tournamentServiceSub$ = this.tournamentService.getTournamentResult().subscribe((tournamentResult: TournamentResult) => {
       this.setNextButton(this.localStorageService.getField("tournament"))
     })
     if (this.localStorageService.getTeams()) {
@@ -72,47 +72,47 @@ export class PlaysComponent implements OnInit, OnDestroy {
   }
 
   disableGameOption = (step: string) => {
-    if (this.gameStep){
+    if (this.gameStep) {
       var currentStepNumber = this.gameStep.charAt(this.gameStep.length - 1)
       var optionStepNumber = step.charAt(step.length - 1)
       return (optionStepNumber > currentStepNumber) ? true : false
     }
     return false
-   
+
   }
 
   setNextButton = (tournamentResult: TournamentResult) => {
     this.disableNextButton = false
-    if (tournamentResult && this.gameStep!=""){
+    if (tournamentResult && this.gameStep != "") {
       var games = this.localStorageService.getField("tournament")[this.gameStep]!.games
-      var isAllOver =  this.isAllGameOver(games)
-      var isAllLocked =  this.isAllGameLocked(games)
-      if (isAllOver){
+      var isAllOver = this.isAllGameOver(games)
+      var isAllLocked = this.isAllGameLocked(games)
+      if (isAllOver) {
         this.disableNextButton = true
-      }else{
-        if (!isAllLocked){
+      } else {
+        if (!isAllLocked) {
           this.disableNextButton = true
         }
       }
-    
-      
-    } 
+
+
+    }
   }
 
-  isAllGameOver = (games:Game[]) => {
+  isAllGameOver = (games: Game[]) => {
     var gameOver = true
-    games.forEach((game:Game)=>{
-      if (!game.gameOver){
+    games.forEach((game: Game) => {
+      if (!game.gameOver) {
         gameOver = false
       }
     })
     return gameOver
   }
 
-  isAllGameLocked = (games:Game[]) => {
+  isAllGameLocked = (games: Game[]) => {
     var gameLocked = true
-    games.forEach((game:Game)=>{
-      if (!game.locked){
+    games.forEach((game: Game) => {
+      if (!game.locked) {
         gameLocked = false
       }
     })
@@ -126,14 +126,28 @@ export class PlaysComponent implements OnInit, OnDestroy {
 
   goNext = () => {
     var tournament = this.localStorageService.getField("tournament")
-    if (tournament){
+    if (tournament) {
       var games = this.localStorageService.getField("tournament")[this.gameStep]!.games
-      games.forEach((game:Game)=>{
+      games.forEach((game: Game) => {
         game.gameOver = true
-        tournament = this.gameService.updateTournament(game,this.gameStep)      
+        tournament = this.gameService.updateTournament(game, this.gameStep)
       })
       this.gameService.updateTeams(tournament, this.gameStep)
       this.gameService.updateTournamentWinArray(tournament)
+      var newStep = ""
+      //TO REPLACE
+      if (this.gameStep==Object.keys(GameEnum)[0]){
+        newStep = Object.keys(GameEnum)[2]
+      }else if (this.gameStep==Object.keys(GameEnum)[2]){
+        newStep = Object.keys(GameEnum)[4]
+      } else if (this.gameStep==Object.keys(GameEnum)[4]){
+        newStep = Object.keys(GameEnum)[6]
+      }
+
+      this.gameService.nextGame(newStep)
+      this.localStorageService.setField("gameStep", newStep)
+      this.gameService.setStep(newStep)
+     
     }
   }
 

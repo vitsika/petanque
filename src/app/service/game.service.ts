@@ -59,6 +59,9 @@ export class GameService {
   }
 
 
+
+
+
   updateTournament = (game: Game, step: string) => {
     var tournamentResult: TournamentResult = this.localStorageService.getField("tournament")
     //update tournament game
@@ -133,6 +136,41 @@ export class GameService {
           break;
       }
     });
+    var noWinTeams:Team[]=[]
+    var oneWinTeams:Team[]=[]
+    var twoWinTeams:Team[]=[]
+    var threeWinTeams:Team[]=[]
+    var fourWinTeams:Team[]=[]
+    noWin.forEach((id)=>{
+      noWinTeams.push(this.teamService.getTeamById(id))
+    })
+    oneWin.forEach((id)=>{
+      oneWinTeams.push(this.teamService.getTeamById(id))
+    })
+    twoWin.forEach((id)=>{
+      twoWinTeams.push(this.teamService.getTeamById(id))
+    })
+    threeWin.forEach((id)=>{
+      threeWinTeams.push(this.teamService.getTeamById(id))
+    })
+    fourWin.forEach((id)=>{
+      fourWinTeams.push(this.teamService.getTeamById(id))
+    })
+    noWinTeams.sort((a,b) => b.score - a.score); 
+    oneWinTeams.sort((a,b) => b.score - a.score); 
+    twoWinTeams.sort((a,b) => b.score - a.score); 
+    threeWinTeams.sort((a,b) => b.score - a.score); 
+    fourWinTeams.sort((a,b) => b.score - a.score); 
+    noWin=[]
+    oneWin=[]
+    twoWin=[]
+    threeWin=[]
+    fourWin=[]
+    noWinTeams.forEach(a=>{ oneWin.push(a.team)})
+    oneWinTeams.forEach(a=>{ noWin.push(a.team)})
+    twoWinTeams.forEach(a=>{ twoWin.push(a.team)})
+    threeWinTeams.forEach(a=>{ threeWin.push(a.team)})
+    fourWinTeams.forEach(a=>{ fourWin.push(a.team)})
     tournament.noWin = noWin
     tournament.oneWin = oneWin
     tournament.twoWin = twoWin
@@ -142,7 +180,29 @@ export class GameService {
 
   }
 
+  nextGame = (step:string) => {
+    var tournament:TournamentResult =this.localStorageService.getField("tournament")
+    var teamsId = tournament.fourWin!.concat(tournament.threeWin!.concat(tournament.twoWin!.concat(tournament.oneWin!.concat(tournament.noWin!))))
+    var exemptedTeam!: Team
+    if (teamsId.length % 2 != 0) {
+      teamsId.push(-99)
+    }
 
-
-
+   //@ts-ignore
+   tournament[step] = {
+      games:[],
+    }
+    //@ts-ignore
+    tournament[step].games = this.teamService.buildMatch(teamsId)
+    //@ts-ignore
+    var gs:Game[] = tournament[step].games
+    exemptedTeam = this.teamService.extractExemptedTeam(gs)
+    //@ts-ignore
+    tournament[step]  = {
+       //@ts-ignore
+      games:gs,
+      exempt: exemptedTeam
+    }
+    this.localStorageService.saveGameResults(tournament)
+  }
 }

@@ -9,8 +9,8 @@
 </div>
 
 <div class="game-component">
-    <div *ngFor="let game of games">
-        <app-play [game]="game" [selectedStep]="selectedStep" ></app-play>
+    <div *ngFor="let game of games;let indexOfelement=index;">
+        <app-play [game]="game" [selectedStep]="selectedStep" [index]="indexOfelement+1" ></app-play>
     </div>
 </div>
 
