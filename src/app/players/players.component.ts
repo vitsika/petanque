@@ -13,6 +13,7 @@ import { TeamService } from '../service/team.service';
 import { TournamentResult } from '../model/tournamentResult';
 import { GameService } from '../service/game.service';
 import { GameEnum } from '../model/game.enum';
+import { TournamentInfo } from '../model/tournamentInfo';
 
 @Component({
   selector: 'app-players',
@@ -28,11 +29,13 @@ export class PlayersComponent implements OnInit {
   enableGametab:boolean=false
   enableAddPlayer:boolean=true
   enableGenerateGame:boolean=true
+  tournamentInfo!:TournamentInfo
 
   columnDefs: ColDef[] = [
     { headerName: 'Equipe', field: 'team', headerCheckboxSelection: true },
     { headerName: 'Joueur1', field: 'player1', editable: true },
     { headerName: 'Joueur2', field: 'player2', editable: true },
+    { headerName: 'Joueur3', field: 'player3', editable: true },
     { headerName: 'Parties jouées', field: 'gamePlayed' },
     { headerName: 'Parties gagnées', field: 'win' },
     { headerName: 'Parties perdues', field: 'lost' },
@@ -72,6 +75,30 @@ export class PlayersComponent implements OnInit {
       this.rowData = teams.allTeams
       this.disableDeletePlayer = false
     }
+    this.columnDefs.forEach((colDef,index) =>{
+      if (colDef.headerName=="Joueur1" || colDef.headerName=="Joueur2"  || colDef.headerName=="Joueur3" ){
+        colDef.editable=false
+      }
+      var info:TournamentInfo =  this.localStorageService.getField("tournamentInfo")
+      this.tournamentInfo = info
+      var type = info.type
+      switch (type) {
+        case "simple":
+          if (colDef.headerName=="Joueur2" || colDef.headerName=="Joueur3"){
+            colDef.hide = true
+          }
+          break;
+          case "doublette":
+            if (colDef.headerName=="Joueur3"){
+              colDef.hide = true
+            }
+            break;
+      
+        default:
+          break;
+      }
+      colDef.headerCheckboxSelection = false
+    })
     
     this.setEnableGame()
   }
@@ -87,8 +114,25 @@ export class PlayersComponent implements OnInit {
       this.enableGametab = false
       this.enableGameService.setEnable(true)
       this.columnDefs.forEach((colDef,index) =>{
-        if (colDef.headerName=="Joueur1" || colDef.headerName=="Joueur2" ){
+        if (colDef.headerName=="Joueur1" || colDef.headerName=="Joueur2"  || colDef.headerName=="Joueur3" ){
           colDef.editable=false
+        }
+        var info:TournamentInfo =  this.localStorageService.getField("tournamentInfo")
+        var type = info.type
+        switch (type) {
+          case "simple":
+            if (colDef.headerName=="Joueur2" || colDef.headerName=="Joueur3"){
+              colDef.hide = true
+            }
+            break;
+            case "doublette":
+              if (colDef.headerName=="Joueur3"){
+                colDef.hide = true
+              }
+              break;
+        
+          default:
+            break;
         }
         colDef.headerCheckboxSelection = false
       })
@@ -106,6 +150,7 @@ export class PlayersComponent implements OnInit {
       team: -1,
       player1: "a",
       player2: "a",
+      player3: "a",
       gamePlayed: 0,
       win: 0,
       lost: 0,
@@ -150,6 +195,7 @@ export class PlayersComponent implements OnInit {
         })
         this.gridApi.setColumnDefs(this.columnDefs)
         this.gridApi.setSuppressRowClickSelection(false)
+        window.location.reload();
       }
     });
 

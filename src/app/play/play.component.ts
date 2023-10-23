@@ -60,9 +60,16 @@ export class PlayComponent implements OnInit, OnDestroy {
   }
 
   onCLickButton(){
-    if ((this.game.team1!.score==this.game.team2!.score) )    {
+    var error = ""
+    if (this.game.team1!.score<0 || this.game.team1!.score>13 || this.game.team2!.score<0 || this.game.team2!.score>13){
+      error = "Le score doit être compris entre 0 et 13 "
+    }
+    if ((this.game.team1!.score==this.game.team2!.score) ){
+      error = 'Les équipes ne peuvent pas être à égalité'
+    }
+    if (error!=""){
       this.notificationService.openNotification({
-        message: 'Les équipes ne peuvent pas être à égalité',
+        message: error,
         actionText: 'Fermer',
         type: NotificationType.ERROR,
       })

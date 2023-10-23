@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { EnableGameService } from './service/enable-game.service';
 import { Subscription } from 'rxjs';
 import { InfoService } from './service/info.service';
@@ -11,7 +11,7 @@ import { LocalStorageService } from './service/localStorage.service';
   styleUrls: ['./app.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'petanque';
   enableGames:boolean=false
   private infoServiceSub$!: Subscription
@@ -25,11 +25,16 @@ export class AppComponent implements OnInit {
       this.enableGames = enable
     })
   }
+  
   ngOnInit(): void {
     this.infoServiceSub$ = this.infoService.getInfo().subscribe((info: TournamentInfo)=>{
       if (info.name!="" && info.date!="" && info.type!=""){
         this.infoSet = true
       }
     })
+  }
+
+  ngOnDestroy(): void {
+    this.infoServiceSub$.unsubscribe()
   }
 }
