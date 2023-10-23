@@ -12,6 +12,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import {MatCardModule} from '@angular/material/card';
 import { PlayComponent } from './play/play.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { PlayComponent } from './play/play.component';
     PlaysComponent,
     SummaryComponent,
     ConfirmModalComponent,
-    PlayComponent
+    PlayComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

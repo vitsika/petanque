@@ -1,0 +1,16 @@
+<div class="form-home">
+    <p style="font-style: 'italic'; font-weight: 'bold'; font-size: 'x-large';">Création d'un nouveau concours</p>
+    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" >
+        <mat-button-toggle value="simple" (change)="onChangleType($event.value)" >Simple</mat-button-toggle>
+        <mat-button-toggle value="doublette" (change)="onChangleType($event.value)" >Doublette</mat-button-toggle>
+        <mat-button-toggle value="triplette" (change)="onChangleType($event.value)">Triplette</mat-button-toggle>
+    </mat-button-toggle-group>
+    <mat-form-field appearance="outline" style="margin-right: 1em;margin-top: 1em;" >
+        <mat-label>Nom du concours</mat-label>
+        <input matInput [(ngModel)]="tournamentName">
+    </mat-form-field>
+
+    
+  
+    <button mat-raised-button color="accent" class="form-element" [disabled]="disableButton()" (click)="createTournament()"> CREER UN CONCOURS</button>
+</div>
