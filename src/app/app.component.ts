@@ -15,13 +15,14 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'petanque';
   enableGames:boolean=false
   private infoServiceSub$!: Subscription
+  private enableGameServiceSub$!: Subscription
   infoSet:boolean = false
 
   constructor(
     private enableGameService: EnableGameService, private infoService: InfoService, private localStorageService: LocalStorageService) {
     var info: TournamentInfo = this.localStorageService.getField("tournamentInfo")
     this.infoSet = info?true:false
-    this.enableGameService.isEnable().subscribe((enable)=> {
+    this.enableGameServiceSub$ = this.enableGameService.isEnable().subscribe((enable)=> {
       this.enableGames = enable
     })
   }
@@ -29,12 +30,13 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.infoServiceSub$ = this.infoService.getInfo().subscribe((info: TournamentInfo)=>{
       if (info.name!="" && info.date!="" && info.type!=""){
-        this.infoSet = true
+        this.infoSet = true   
       }
     })
   }
 
   ngOnDestroy(): void {
     this.infoServiceSub$.unsubscribe()
+    this.enableGameServiceSub$.unsubscribe()
   }
 }

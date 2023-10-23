@@ -40,6 +40,7 @@ export class PlayersComponent implements OnInit {
     { headerName: 'Parties gagnées', field: 'win' },
     { headerName: 'Parties perdues', field: 'lost' },
     { headerName: 'Score', field: 'score' },
+    { headerName: 'Goal average', field: 'goalAverage' },
   ];
 
   defaultColDef = {
@@ -154,7 +155,8 @@ export class PlayersComponent implements OnInit {
       gamePlayed: 0,
       win: 0,
       lost: 0,
-      score: 0
+      score: 0,
+      goalAverage: 0
     }
     //get allTeams
     var teams = this.localStorageService.getTeams()
@@ -330,7 +332,7 @@ export class PlayersComponent implements OnInit {
           emptyName = true
         }
       })
-      if (teams.allTeams.length > 5 && !emptyName) {
+      if (teams.allTeams.length > 2 && !emptyName) {
         enableGame = true
         this.enableGenerateGame = true
       }

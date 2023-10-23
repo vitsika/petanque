@@ -10,5 +10,6 @@ export interface Team {
     gamePlayed:number;
     win:number;
     lost:number;
-    score:number
+    score:number,
+    goalAverage:number
   }

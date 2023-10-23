@@ -1,12 +1,13 @@
-<div class="petanque-content" *ngIf="infoSet">
-<mat-tab-group  backgroundColor="primary">
-  <mat-tab label="Joueurs"> <app-players></app-players> </mat-tab>
-  <mat-tab label="Parties" [disabled]="!enableGames"> <app-plays class="plays-component"></app-plays> </mat-tab>
-  <mat-tab label="Résumé" disabled> <app-summary></app-summary> </mat-tab>
-</mat-tab-group>
-<app-home></app-home>
 
-</div>
-<div class="petanque-content-home" *ngIf="!infoSet">
-  <app-home></app-home>
-</div>
+  <div class="petanque-content" *ngIf="infoSet" >
+    <mat-tab-group backgroundColor="primary">
+      <mat-tab label="Joueurs"> <app-players></app-players> </mat-tab>
+      <mat-tab label="Parties" [disabled]="!enableGames"> <app-plays class="plays-component"></app-plays> </mat-tab>
+      <mat-tab label="Résumé" disabled> <app-summary></app-summary> </mat-tab>
+    </mat-tab-group>
+
+  </div>
+
+  <div class="petanque-content-home" *ngIf="!infoSet">
+    <app-home></app-home>
+  </div>

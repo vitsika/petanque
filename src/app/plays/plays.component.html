@@ -10,7 +10,7 @@
 
 <div class="game-component">
     <div *ngFor="let game of games;let indexOfelement=index;">
-        <app-play [game]="game" [selectedStep]="selectedStep" [index]="indexOfelement" ></app-play>
+        <app-play [game]="game" [selectedStep]="selectedStep" [index]="indexOfelement+1" ></app-play>
     </div>
 </div>
 

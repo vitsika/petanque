@@ -133,8 +133,15 @@ export class PlaysComponent implements OnInit, OnDestroy {
         tournament = this.gameService.updateTournament(game, this.gameStep)
       })
       this.gameService.updateTeams(tournament, this.gameStep)
-      this.gameService.updateTournamentWinArray(tournament)
+      var updatedData = this.gameService.updateTournamentWinArray(tournament)
+      tournament = updatedData.tournament
+      var rankedTeams = updatedData.rankedTeams
+      this.localStorageService.saveGameResults(tournament)
+      this.localStorageService.setTeams({
+        allTeams:rankedTeams
+      })
       var newStep = ""
+
       //TO REPLACE
       if (this.gameStep==Object.keys(GameEnum)[0]){
         newStep = Object.keys(GameEnum)[2]

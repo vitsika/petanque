@@ -162,5 +162,28 @@ export class TeamService {
 
 
 
+  updateWinGoalAverage = (team1Id:number,team2Id:number, teams:Team[], team1GA: number, team2GA:number) => {
+    teams.forEach((team:Team) => {
+      if (team.team==team1Id){
+        team.goalAverage+= team1GA
+      }
+      if (team.team==team2Id){
+        team.goalAverage+=team2GA
+      }
+    })
+    return teams
+  }
+
+  updateLostGoalAverage = (teamId:number, teams:Team[], team1Score:number, team2Score:number) => {
+    teams.forEach((team:Team) => {
+      if (team.team==teamId){
+        team.goalAverage = team2Score - team1Score
+      }
+    })
+    return teams
+  }
+
+
+
 
 }

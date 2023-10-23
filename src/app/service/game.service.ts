@@ -89,13 +89,21 @@ export class GameService {
       allTeams = this.teamService.updateScoreTeam(team1!.teamId, allTeams, team1!.score)
       allTeams = this.teamService.updateScoreTeam(team2!.teamId, allTeams, team2!.score)
       //update Win
+      var team1GoalAverage = 0;
+      var team2GoalAverage = 0
       if (team1!.teamId == game.winner) {
         allTeams = this.teamService.updateWinTeam(team1!.teamId, allTeams)
         allTeams = this.teamService.updateLostTeam(team2!.teamId, allTeams)
+        team1GoalAverage = team1!.score - team2!.score
+        team2GoalAverage = -1*team1GoalAverage
+        
       } else {
         allTeams = this.teamService.updateWinTeam(team2!.teamId, allTeams)
         allTeams = this.teamService.updateLostTeam(team1!.teamId, allTeams)
+        team2GoalAverage = team2!.score - team1!.score
+        team1GoalAverage = -1*team2GoalAverage
       }
+      allTeams = this.teamService.updateWinGoalAverage(team1!.teamId,team2!.teamId, allTeams, team1GoalAverage, team2GoalAverage)
 
     })
     //increment gemaPlayed
@@ -156,18 +164,18 @@ export class GameService {
     fourWin.forEach((id)=>{
       fourWinTeams.push(this.teamService.getTeamById(id))
     })
-    noWinTeams.sort((a,b) => b.score - a.score); 
-    oneWinTeams.sort((a,b) => b.score - a.score); 
-    twoWinTeams.sort((a,b) => b.score - a.score); 
-    threeWinTeams.sort((a,b) => b.score - a.score); 
-    fourWinTeams.sort((a,b) => b.score - a.score); 
+    noWinTeams.sort((a,b) => b.goalAverage - a.goalAverage); 
+    oneWinTeams.sort((a,b) => b.goalAverage - a.goalAverage); 
+    twoWinTeams.sort((a,b) => b.goalAverage - a.goalAverage); 
+    threeWinTeams.sort((a,b) => b.goalAverage - a.goalAverage); 
+    fourWinTeams.sort((a,b) => b.goalAverage - a.goalAverage); 
     noWin=[]
     oneWin=[]
     twoWin=[]
     threeWin=[]
     fourWin=[]
-    noWinTeams.forEach(a=>{ oneWin.push(a.team)})
-    oneWinTeams.forEach(a=>{ noWin.push(a.team)})
+    noWinTeams.forEach(a=>{ noWin.push(a.team)})
+    oneWinTeams.forEach(a=>{ oneWin.push(a.team)})
     twoWinTeams.forEach(a=>{ twoWin.push(a.team)})
     threeWinTeams.forEach(a=>{ threeWin.push(a.team)})
     fourWinTeams.forEach(a=>{ fourWin.push(a.team)})
@@ -176,8 +184,11 @@ export class GameService {
     tournament.twoWin = twoWin
     tournament.threeWin = threeWin
     tournament.fourWin = fourWin
-    this.localStorageService.saveGameResults(tournament)
-
+    var rankedTeams = fourWinTeams.concat(threeWinTeams.concat(twoWinTeams.concat(oneWinTeams.concat(noWinTeams))))
+    return {
+      tournament:tournament,
+      rankedTeams:rankedTeams
+     }
   }
 
   nextGame = (step:string) => {
