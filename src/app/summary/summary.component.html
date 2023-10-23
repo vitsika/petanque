@@ -1,1 +1,14 @@
-<p>summary works!</p>
+ <p class="info">{{tournamentInfo.name}} - {{tournamentInfo.type}} - {{tournamentInfo.date}}</p>
+
+<div id="grid">
+    <ag-grid-angular
+    #agGrid
+    id="playerGrid2"
+    style="height: 70vh; margin: 2vw;" 
+    class="ag-theme-alpine"
+    [rowData]="rowData" 
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    (gridReady)="onGridReady($event)">
+    </ag-grid-angular>
+</div>

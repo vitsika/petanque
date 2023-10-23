@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 import { InfoService } from './service/info.service';
 import { TournamentInfo } from './model/tournamentInfo';
 import { LocalStorageService } from './service/localStorage.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { SummaryService } from './service/summary.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   infoSet:boolean = false
 
   constructor(
-    private enableGameService: EnableGameService, private infoService: InfoService, private localStorageService: LocalStorageService) {
+    private enableGameService: EnableGameService, private infoService: InfoService, private localStorageService: LocalStorageService, private summaryService:SummaryService) {
     var info: TournamentInfo = this.localStorageService.getField("tournamentInfo")
     this.infoSet = info?true:false
     this.enableGameServiceSub$ = this.enableGameService.isEnable().subscribe((enable)=> {
@@ -39,4 +41,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.infoServiceSub$.unsubscribe()
     this.enableGameServiceSub$.unsubscribe()
   }
+
+  onTabChanged(index: number) {
+    //workarround for fit grid api in summary tab
+    if (index==2) this.summaryService.setResize(true)
+ } 
 }

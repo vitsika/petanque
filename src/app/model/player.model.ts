@@ -13,3 +13,8 @@ export interface Team {
     score:number,
     goalAverage:number
   }
+
+  export interface RankedTeam {
+    rank: number,
+    team:Team
+  }

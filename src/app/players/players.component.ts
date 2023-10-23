@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CellEditingStoppedEvent, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowEditingStoppedEvent, RowValueChangedEvent, SelectionChangedEvent } from 'ag-grid-community';
 import { LocalStorageService } from '../service/localStorage.service';
 import { Team, Teams } from '../model/player.model';
@@ -7,10 +7,8 @@ import { NotificationService } from '../service/notification.service';
 import { NotificationType } from '../model/notificationType';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
-import { first } from 'rxjs';
+import { Subscription, first } from 'rxjs';
 import { EnableGameService } from '../service/enable-game.service';
-import { TeamService } from '../service/team.service';
-import { TournamentResult } from '../model/tournamentResult';
 import { GameService } from '../service/game.service';
 import { GameEnum } from '../model/game.enum';
 import { TournamentInfo } from '../model/tournamentInfo';
@@ -21,26 +19,27 @@ import { TournamentInfo } from '../model/tournamentInfo';
   styleUrls: ['./players.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class PlayersComponent implements OnInit {
+export class PlayersComponent implements OnInit, OnDestroy {
   private gridApi!: GridApi;
   private gridColumnApi!: ColumnApi;
   public rowSelection: 'single' | 'multiple' = 'multiple';
   disableDeletePlayer: boolean = true
-  enableGametab:boolean=false
-  enableAddPlayer:boolean=true
-  enableGenerateGame:boolean=true
-  tournamentInfo!:TournamentInfo
+  enableGametab: boolean = false
+  enableAddPlayer: boolean = true
+  enableGenerateGame: boolean = true
+  tournamentInfo!: TournamentInfo
+  playerServiceSub$!: Subscription
 
   columnDefs: ColDef[] = [
     { headerName: 'Equipe', field: 'team', headerCheckboxSelection: true },
     { headerName: 'Joueur1', field: 'player1', editable: true },
     { headerName: 'Joueur2', field: 'player2', editable: true },
     { headerName: 'Joueur3', field: 'player3', editable: true },
-    { headerName: 'Parties jouées', field: 'gamePlayed' },
-    { headerName: 'Parties gagnées', field: 'win' },
-    { headerName: 'Parties perdues', field: 'lost' },
-    { headerName: 'Score', field: 'score' },
-    { headerName: 'Goal average', field: 'goalAverage' },
+    { headerName: 'Parties jouées', field: 'gamePlayed', hide: true },
+    { headerName: 'Parties gagnées', field: 'win', hide: true },
+    { headerName: 'Parties perdues', field: 'lost', hide: true },
+    { headerName: 'Score', field: 'score', hide: true },
+    { headerName: 'Goal average', field: 'goalAverage', hide: true },
   ];
 
   defaultColDef = {
@@ -60,14 +59,17 @@ export class PlayersComponent implements OnInit {
     private notificationService: NotificationService,
     private dialog: MatDialog,
     private enableGameService: EnableGameService,
-    private gameService:GameService) {
-    this.playerService.getTeams().subscribe(teams => {
+    private gameService: GameService) {
+    this.playerServiceSub$ = this.playerService.getTeams().subscribe(teams => {
       if (teams) {
         this.rowData = teams.allTeams
       } else {
         this.rowData = []
       }
     })
+  }
+  ngOnDestroy(): void {
+    this.playerServiceSub$.unsubscribe()
   }
 
   ngOnInit(): void {
@@ -76,32 +78,34 @@ export class PlayersComponent implements OnInit {
       this.rowData = teams.allTeams
       this.disableDeletePlayer = false
     }
-    this.columnDefs.forEach((colDef,index) =>{
-      if (colDef.headerName=="Joueur1" || colDef.headerName=="Joueur2"  || colDef.headerName=="Joueur3" ){
-        colDef.editable=false
-      }
-      var info:TournamentInfo =  this.localStorageService.getField("tournamentInfo")
-      this.tournamentInfo = info
-      var type = info.type
+    var info: TournamentInfo = this.localStorageService.getField("tournamentInfo")
+    this.tournamentInfo = info
+    var type = info.type
+    this.columnDefs.forEach((colDef, index) => {
       switch (type) {
         case "simple":
-          if (colDef.headerName=="Joueur2" || colDef.headerName=="Joueur3"){
+          if (colDef.headerName == "Joueur2" || colDef.headerName == "Joueur3") {
             colDef.hide = true
           }
           break;
-          case "doublette":
-            if (colDef.headerName=="Joueur3"){
-              colDef.hide = true
-            }
-            break;
-      
+        case "doublette":
+          if (colDef.headerName == "Joueur3") {
+            colDef.hide = true
+          }
+          break;
+
         default:
           break;
       }
       colDef.headerCheckboxSelection = false
     })
-    
+
     this.setEnableGame()
+  }
+
+  @HostListener('window:resize')
+  onResize(event: any) {
+    this.gridApi.sizeColumnsToFit()
   }
 
   onGridReady(params: GridReadyEvent): void {
@@ -109,29 +113,29 @@ export class PlayersComponent implements OnInit {
     this.gridColumnApi = params.columnApi;
     this.enableDisableRemovePlayer()
     var gameStarted = this.localStorageService.getField("gameStarted")
-    if (gameStarted){
+    if (gameStarted) {
       this.enableAddPlayer = false
       this.disableDeletePlayer = true
       this.enableGametab = false
       this.enableGameService.setEnable(true)
-      this.columnDefs.forEach((colDef,index) =>{
-        if (colDef.headerName=="Joueur1" || colDef.headerName=="Joueur2"  || colDef.headerName=="Joueur3" ){
-          colDef.editable=false
+      this.columnDefs.forEach((colDef, index) => {
+        if (colDef.headerName == "Joueur1" || colDef.headerName == "Joueur2" || colDef.headerName == "Joueur3") {
+          colDef.editable = false
         }
-        var info:TournamentInfo =  this.localStorageService.getField("tournamentInfo")
+        var info: TournamentInfo = this.localStorageService.getField("tournamentInfo")
         var type = info.type
         switch (type) {
           case "simple":
-            if (colDef.headerName=="Joueur2" || colDef.headerName=="Joueur3"){
+            if (colDef.headerName == "Joueur2" || colDef.headerName == "Joueur3") {
               colDef.hide = true
             }
             break;
-            case "doublette":
-              if (colDef.headerName=="Joueur3"){
-                colDef.hide = true
-              }
-              break;
-        
+          case "doublette":
+            if (colDef.headerName == "Joueur3") {
+              colDef.hide = true
+            }
+            break;
+
           default:
             break;
         }
@@ -185,14 +189,14 @@ export class PlayersComponent implements OnInit {
     dialogRef.afterClosed().pipe(first()).subscribe((res) => {
       if (res === 'confirm') {
         this.localStorageService.removeAll()
-        this.disableDeletePlayer = true        
+        this.disableDeletePlayer = true
         this.enableAddPlayer = true
         this.enableGametab = false
         this.enableGameService.setEnable(false)
         this.setEnableGame()
-        this.columnDefs.forEach((colDef,index) =>{
-          if (colDef.headerName=="Joueur1" || colDef.headerName=="Joueur2" ){
-            colDef.editable=true
+        this.columnDefs.forEach((colDef, index) => {
+          if (colDef.headerName == "Joueur1" || colDef.headerName == "Joueur2") {
+            colDef.editable = true
           }
         })
         this.gridApi.setColumnDefs(this.columnDefs)
@@ -229,7 +233,7 @@ export class PlayersComponent implements OnInit {
 
   }
 
-  onGenerateGames = () => {    
+  onGenerateGames = () => {
     let dialogRef = this.dialog.open(ConfirmModalComponent, {
       height: 'auto',
       width: '300px',
@@ -245,9 +249,9 @@ export class PlayersComponent implements OnInit {
         this.disableDeletePlayer = true
         this.enableGenerateGame = false
         this.enableGameService.setEnable(this.enableGametab)
-        this.columnDefs.forEach((colDef,index) =>{
-          if (colDef.headerName=="Joueur1" || colDef.headerName=="Joueur2" ){
-            colDef.editable=false
+        this.columnDefs.forEach((colDef, index) => {
+          if (colDef.headerName == "Joueur1" || colDef.headerName == "Joueur2") {
+            colDef.editable = false
           }
           colDef.headerCheckboxSelection = false
         })
@@ -266,10 +270,10 @@ export class PlayersComponent implements OnInit {
 
       }
     });
-   
+
   }
 
-  
+
 
   onCellValueChanged(event: CellValueChangedEvent): void {
     this.setNewTeams()

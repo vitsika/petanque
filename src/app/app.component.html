@@ -1,11 +1,10 @@
 
   <div class="petanque-content" *ngIf="infoSet" >
-    <mat-tab-group backgroundColor="primary">
+    <mat-tab-group backgroundColor="primary"  (selectedIndexChange)="onTabChanged($event)">
       <mat-tab label="Joueurs"> <app-players></app-players> </mat-tab>
       <mat-tab label="Parties" [disabled]="!enableGames"> <app-plays class="plays-component"></app-plays> </mat-tab>
-      <mat-tab label="Résumé" disabled> <app-summary></app-summary> </mat-tab>
+      <mat-tab label="Classement" [disabled]="!enableGames"> <app-summary></app-summary> </mat-tab>
     </mat-tab-group>
-
   </div>
 
   <div class="petanque-content-home" *ngIf="!infoSet">
