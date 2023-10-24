@@ -155,9 +155,9 @@ export class PlayersComponent implements OnInit, OnDestroy {
   onAddPlayer = () => {
     var newTeam: Team = {
       team: -1,
-      player1: "a",
-      player2: "a",
-      player3: "a",
+      player1: "",
+      player2: "",
+      player3: "",
       gamePlayed: 0,
       win: 0,
       lost: 0,
@@ -332,18 +332,39 @@ export class PlayersComponent implements OnInit, OnDestroy {
     var enableGame: boolean = false
     var teams = this.localStorageService.getTeams()
     if (teams) {
-      teams.allTeams.forEach(node => {
-        var team = node
-        if (team.player1.trim() == "" || team.player2.trim() == "") {
-          emptyName = true
-        }
-      })
-      if (teams.allTeams.length > 2 && !emptyName) {
+      emptyName = this.isEmptyName(teams.allTeams)
+      if (teams.allTeams.length > 1 && !emptyName) {
         enableGame = true
         this.enableGenerateGame = true
       }
     }
     this.enableGametab = enableGame
+  }
+
+  isEmptyName = (teams: Team[]) => {
+    var info = this.localStorageService.getField("tournamentInfo")
+    var gameType = info.type
+    var emptyName: boolean = false
+    var i = 0
+    while (!emptyName && i < teams.length) {
+      var team: Team = teams[i]
+      switch (gameType) {
+        case "simple":
+          emptyName = team.player1.trim() == ""
+          break;
+        case "doublette":
+          emptyName = team.player1.trim() == "" || team.player2.trim() == ""
+          break;
+        case "triplette":
+          emptyName = team.player1.trim() == "" || team.player2.trim() == "" || team.player3.trim() == ""
+          break;
+
+        default:
+          break;
+      }
+      i++
+    }
+    return emptyName
   }
 
 

@@ -10,3 +10,23 @@
   <div class="petanque-content-home" *ngIf="!infoSet">
     <app-home></app-home>
   </div>
+
+
+  <div class="copyright"> 
+    <span>&copy; Vitsik@ - 2023 </span> 
+    <a href="https://vitsika.tech" target="_blank" rel="noopener noreferrer"><img
+      class="icon"
+      src="assets/logo_Vitsik@.png"
+    /></a>
+    
+  </div>
+
+
+  <div class="help" (click)="onClickInfo()"> 
+    <button matTooltip="Information"  mat-icon-button >
+      <mat-icon class="app-icon-help" style="color: #FF7700;" >info</mat-icon>
+  </button> 
+  </div>
+
+
+ 

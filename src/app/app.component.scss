@@ -12,7 +12,7 @@
 }
 
 
-.petanque-content-home{
+.petanque-content-home {
     margin: 15vh;
     //border: solid;
     //border-width: 1px;
@@ -20,7 +20,7 @@
     height: auto;
     width: auto;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
-    border-radius:5px;
+    border-radius: 5px;
     justify-content: center;
     align-items: center;
     align-self: center;
@@ -41,13 +41,38 @@
     }
 }
 
-.mat-tab-body-wrapper{
+.mat-tab-body-wrapper {
     height: 85vh;
 }
-.plays-component{
+
+.plays-component {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 2vw;
+}
+
+.help {
+    position: absolute;
+    right: 3vh;
+    bottom: 3vh;
+}
+
+.copyright {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 3vh;
+    text-align: center;
+}
+
+.icon{
+    width: 1.5vw;
+}
+
+.app-icon-help{
+    transform: scale(1.5);
 }

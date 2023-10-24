@@ -1,7 +1,20 @@
 
 <div id="player">
     <p class="info">{{tournamentInfo.name}} - {{tournamentInfo.type}} - {{tournamentInfo.date}}</p>
-   
+    <div id="gridController" class="grid-controller">
+        <button matTooltip="Ajouter une équipe" mat-icon-button (click)="onAddPlayer()"[disabled]="!enableAddPlayer"  style="margin: 0 0.5vh 0 0">
+            <mat-icon class="app-icon">person_add</mat-icon>
+        </button> 
+        <button mat-icon-button matTooltip="Supprimer une équipe" (click)="onRemovePlayer()" [disabled]="disableDeletePlayer"  style="margin: 0 0.5vh 0 0">
+            <mat-icon class="app-icon" >person_remove</mat-icon>
+        </button> 
+        <button mat-icon-button matTooltip="Réinitialiser le concours" (click)="onRemoveAll()" [disabled]="this.rowData.length==0" style="margin: 0 0.5vh 0 0" >
+            <mat-icon class="app-icon" >restart_alt</mat-icon>
+        </button> 
+        <button matTooltip="Générer les parties" (click) = "onGenerateGames()" mat-icon-button [disabled]="!enableGametab || !enableGenerateGame" style="margin: 0 0.5vh 0 0">
+            <mat-icon class="app-icon" [ngStyle]="{'color': (!enableGametab || !enableGenerateGame) ? '#bfbfbf' : '#FF7700'}" >play_circle_filled</mat-icon>
+        </button> 
+    </div>
     <div id="grid">
         <ag-grid-angular
         #agGrid
@@ -19,20 +32,7 @@
         (firstDataRendered)="onFirstDataRendered($event)">
         </ag-grid-angular>
     </div>
-    <div id="gridController" class="grid-controller">
-        <button matTooltip="Ajouter une équipe" mat-icon-button (click)="onAddPlayer()"[disabled]="!enableAddPlayer">
-            <mat-icon>person_add</mat-icon>
-        </button> 
-        <button mat-icon-button matTooltip="Supprimer une équipe" (click)="onRemovePlayer()" [disabled]="disableDeletePlayer">
-            <mat-icon>person_remove</mat-icon>
-        </button> 
-        <button mat-icon-button matTooltip="Supprimer toutes les équipes" (click)="onRemoveAll()" [disabled]="this.rowData.length==0">
-            <mat-icon>delete_sweep</mat-icon>
-        </button> 
-        <button matTooltip="Générer les parties" (click) = "onGenerateGames()" mat-icon-button [disabled]="!enableGametab || !enableGenerateGame">
-            <mat-icon>play_circle_filled</mat-icon>
-        </button> 
-    </div>
+    
     
     
 </div>

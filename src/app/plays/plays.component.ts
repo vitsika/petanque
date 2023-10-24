@@ -17,12 +17,14 @@ export class PlaysComponent implements OnInit, OnDestroy {
   gameSteps: any[] = ["Partie 1", "Partie 2", "Partie 3", "Partie 4"]
   tournament: any = {}
   gameStep: string = ""
-  games = []
+  games:Game[] = []
   defaultStep = <any>""
   selectedStep: string = ""
   disableNextButton = false
   gameServiceSub$!: Subscription
   tournamentServiceSub$!: Subscription
+  filterEmpty = true;
+  filterText:string=""
 
 
   constructor(private localStorageService: LocalStorageService, private gameService: GameService, private tournamentService: TournamentService) {
@@ -35,7 +37,9 @@ export class PlaysComponent implements OnInit, OnDestroy {
     this.gameServiceSub$ = this.gameService.getStep().subscribe((step) => {
       this.gameStep = step
       if (step) {
-        this.games = this.tournament = this.localStorageService.getField("tournament")[step]!.games
+         var tournament = this.localStorageService.getField("tournament")
+        if (tournament)
+        this.games = this.tournament = tournament[step]!.games
         this.setDefaultStep(step)
         this.setNextButton(this.localStorageService.getField("tournament"))
       }
@@ -155,6 +159,43 @@ export class PlaysComponent implements OnInit, OnDestroy {
       this.localStorageService.setField("gameStep", newStep)
       this.gameService.setStep(newStep)
      
+    }
+  }
+
+  onFilterValueChange = (newValue:any) =>{
+    this.filterEmpty = true
+    if (newValue.trim()!=""){
+      this.filterEmpty = false
+    }
+
+    //FILTER FUNCTION
+    //filter all teams by name
+    var teams = this.localStorageService.getTeams().allTeams
+    var games = this.localStorageService.getField("tournament")[this.gameStep]!.games
+    var filteredTeams = teams.filter((team:Team)=>{
+      return team.player1.includes(newValue) || team.player2.includes(newValue) || team.player3.includes(newValue) || team.team==newValue
+    })
+    var filteredTeamsId:number[] = []
+    filteredTeams.forEach((team:Team)=> {
+      filteredTeamsId.push(team.team)
+    })
+    var filteredGames:Game[]=[]
+    filteredTeamsId.forEach((id:number)=>{
+      games.forEach((game:Game)=>{
+        if (game.team1!.teamId == id || game.team2!.teamId == id) {
+          filteredGames.push(game)
+        }
+      })
+    })
+    filteredGames = filteredGames.filter((value, index) => filteredGames.indexOf(value) === index)    
+    this.games = filteredGames
+  }
+
+  onFilterClick = () => {
+    if (!this.filterEmpty){
+      this.filterEmpty = true
+      this.filterText =""
+      this.games = this.localStorageService.getField("tournament")[this.gameStep]!.games
     }
   }
 

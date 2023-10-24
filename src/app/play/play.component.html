@@ -1,11 +1,11 @@
 
 <mat-card [ngClass]="setClass()">
     <div class="match-number-div"> <p class="match-number-p">Match {{index}}</p></div>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline"  [matTooltip]="team1Tooltip"  matTooltipPosition="above">
         <mat-label>Equipe {{game.team1!.teamId!}}</mat-label>
         <input  (keydown.enter)="onCLickButton()" type="number" min="0" max="13" matInput placeholder="Score" [value]="game.team1!.score!" [disabled]="game.gameOver || game.locked" [(ngModel)]="game.team1!.score">
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" [matTooltip]="team2Tooltip" matTooltipPosition="below">
         <mat-label>Equipe {{game.team2!.teamId!}}</mat-label>
         <input  (keydown.enter)="onCLickButton()" type="number" min="0" max="13" matInput placeholder="Score" [value]="game.team2!.score!" [disabled]="game.gameOver || game.locked"  [(ngModel)]="game.team2!.score">
     </mat-form-field>
