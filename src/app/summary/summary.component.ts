@@ -21,7 +21,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
   tournamentInfo!:TournamentInfo
   rowData: RankedTeam[] = [];
   columnDefs: ColDef[] = [
-    { headerName: 'Classement général', field: 'rank' },
+    { headerName: 'Classement', field: 'rank' },
     { headerName: 'Equipe', field: 'team.team'},
     { headerName: 'Joueur1', field: 'team.player1'  },
     { headerName: 'Joueur2', field: 'team.player2' },

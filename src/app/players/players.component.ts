@@ -12,6 +12,7 @@ import { EnableGameService } from '../service/enable-game.service';
 import { GameService } from '../service/game.service';
 import { GameEnum } from '../model/game.enum';
 import { TournamentInfo } from '../model/tournamentInfo';
+import { ReloadService } from '../service/reload.service';
 
 @Component({
   selector: 'app-players',
@@ -59,7 +60,8 @@ export class PlayersComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private dialog: MatDialog,
     private enableGameService: EnableGameService,
-    private gameService: GameService) {
+    private gameService: GameService,
+    private reloadService: ReloadService) {
     this.playerServiceSub$ = this.playerService.getTeams().subscribe(teams => {
       if (teams) {
         this.rowData = teams.allTeams
@@ -201,7 +203,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
         })
         this.gridApi.setColumnDefs(this.columnDefs)
         this.gridApi.setSuppressRowClickSelection(false)
-        window.location.reload();
+        this.reloadService.setReload(true)
       }
     });
 

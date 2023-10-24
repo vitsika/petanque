@@ -6,6 +6,7 @@ import { TournamentInfo } from './model/tournamentInfo';
 import { LocalStorageService } from './service/localStorage.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { SummaryService } from './service/summary.service';
+import { ReloadService } from './service/reload.service';
 
 @Component({
   selector: 'app-root',
@@ -18,14 +19,19 @@ export class AppComponent implements OnInit, OnDestroy {
   enableGames:boolean=false
   private infoServiceSub$!: Subscription
   private enableGameServiceSub$!: Subscription
+  private reloadServiceSub$!: Subscription
   infoSet:boolean = false
 
   constructor(
-    private enableGameService: EnableGameService, private infoService: InfoService, private localStorageService: LocalStorageService, private summaryService:SummaryService) {
+    private enableGameService: EnableGameService, private infoService: InfoService, private localStorageService: LocalStorageService, private summaryService:SummaryService, 
+    private reloadService:ReloadService) {
     var info: TournamentInfo = this.localStorageService.getField("tournamentInfo")
     this.infoSet = info?true:false
     this.enableGameServiceSub$ = this.enableGameService.isEnable().subscribe((enable)=> {
       this.enableGames = enable
+    })
+    this.reloadServiceSub$ = this.reloadService.isReload().subscribe((reload:boolean)=> {
+      if (reload)this.infoSet = false   
     })
   }
   
@@ -40,6 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.infoServiceSub$.unsubscribe()
     this.enableGameServiceSub$.unsubscribe()
+    this.reloadServiceSub$.unsubscribe()
   }
 
   onTabChanged(index: number) {
