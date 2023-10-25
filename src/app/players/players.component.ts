@@ -107,7 +107,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
 
   @HostListener('window:resize')
   onResize(event: any) {
-    this.gridApi.sizeColumnsToFit()
+    if (this.gridApi)this.gridApi.sizeColumnsToFit()
   }
 
   onGridReady(params: GridReadyEvent): void {
@@ -177,7 +177,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
 
   }
 
-
+  
   onRemoveAll = () => {
     let dialogRef = this.dialog.open(ConfirmModalComponent, {
       height: 'auto',
@@ -278,7 +278,11 @@ export class PlayersComponent implements OnInit, OnDestroy {
 
 
   onCellValueChanged(event: CellValueChangedEvent): void {
-    this.setNewTeams()
+    if (!event.value){
+      this.enableGenerateGame = false
+    }else{
+      this.setNewTeams()
+    }
   }
 
   onSelectionChanged(event: SelectionChangedEvent): void {
@@ -314,9 +318,9 @@ export class PlayersComponent implements OnInit, OnDestroy {
       allTeams: tmp
     }
     if (newTeams.allTeams.length == 0) {
-      this.localStorageService?.removeAll()
+      this.localStorageService!.removeAll()
     } else {
-      this.localStorageService?.setTeams(newTeams)
+      this.localStorageService!.setTeams(newTeams)
     }
   }
 
@@ -340,6 +344,8 @@ export class PlayersComponent implements OnInit, OnDestroy {
     }
     this.enableGametab = enableGame
   }
+
+
 
   isEmptyName = (teams: Team[]) => {
     var info = this.localStorageService.getField("tournamentInfo")

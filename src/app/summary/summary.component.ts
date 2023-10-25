@@ -57,7 +57,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
       }
     })
    this.summaryServiceSub$ = this.summaryService.isRezise().subscribe((resize:boolean)=>{
-      if (resize) this.gridApi.sizeColumnsToFit()
+      if (resize && this.gridApi) this.gridApi.sizeColumnsToFit()
     })
 
 

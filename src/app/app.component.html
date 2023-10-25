@@ -22,10 +22,13 @@
   </div>
 
 
-  <div class="help" (click)="onClickInfo()"> 
+  <div class="help" > 
     <button matTooltip="Information"  mat-icon-button >
-      <mat-icon class="app-icon-help" style="color: #FF7700;" >info</mat-icon>
+      <mat-icon (click)="onClickInfo()" class="app-icon-help" style="color: #FF7700;" >info</mat-icon>
   </button> 
+  <button matTooltip="Information"  mat-icon-button >
+    <mat-icon (click)="onClickHelp()" class="app-icon-help" style="color: #FF7700;" >contact_support</mat-icon>
+</button> 
   </div>
 
 
