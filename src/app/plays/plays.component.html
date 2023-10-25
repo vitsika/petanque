@@ -7,7 +7,7 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field style="margin: 0.5vh;" appearance="outline">
-        <mat-label>Chercher</mat-label>
+        <mat-label>Chercher par nom/équipe</mat-label>
         <input matInput placeholder="Chercher"  type="search" [(ngModel)]="filterText" (ngModelChange)="onFilterValueChange($event)" >
         <button mat-icon-button matSuffix (click)="onFilterClick()">
           <mat-icon>{{filterEmpty ? 'search' : 'cancel'}}</mat-icon>

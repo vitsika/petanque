@@ -154,10 +154,11 @@ export class PlaysComponent implements OnInit, OnDestroy {
       } else if (this.gameStep==Object.keys(GameEnum)[4]){
         newStep = Object.keys(GameEnum)[6]
       }
-
+      if (newStep!=""){
       this.gameService.nextGame(newStep)
       this.localStorageService.setField("gameStep", newStep)
-      this.gameService.setStep(newStep)
+      this.gameService.setStep(newStep)        
+      }
      
     }
   }
