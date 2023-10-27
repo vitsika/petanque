@@ -33,7 +33,6 @@
     "win": {
       "icon": "dist/petanque/assets/petanque.png",
       "certificateFile": "\\\\NAS-Vitsika\\Vitsika\\Vitsik@\\Projects\\App_security\\vitsika.p12",
-      "certificatePassword": "fanantenana1985",
       "publisherName":"${author}"
     }
   },
