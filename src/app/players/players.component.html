@@ -18,11 +18,11 @@
             Générer les parties  <mat-icon class="app-icon" [ngStyle]="{'color': (!enableGametab || !enableGenerateGame) ? '#bfbfbf' : '#FF7700'}" >play_circle_filled</mat-icon>
         </button> 
     </div>
-    <div id="grid" >
+    <div id="grid" class="player-grid">
         <ag-grid-angular
         #agGrid
         id="playerGrid"
-        style="height: 65vh; margin: 2vw;" 
+        style="height: 60vh; margin: 2vw;" 
         class="ag-theme-alpine"
         [rowData]="rowData" 
         [columnDefs]="columnDefs"

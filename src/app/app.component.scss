@@ -27,6 +27,8 @@
     display: flex;
 }
 
+
+
 .mat-tab-list .mat-tab-labels .mat-tab-label-active {
     background-color: $ds-orange-60;
     color: white !important;
@@ -57,6 +59,7 @@
     position: absolute;
     right: 3vh;
     bottom: 3vh;
+    z-index: 99;
 }
 
 .copyright {
@@ -69,10 +72,32 @@
     text-align: center;
 }
 
-.icon{
+.icon {
     width: 1.5vw;
 }
 
-.app-icon-help{
+.app-icon-help {
     transform: scale(1.5);
+}
+
+@media only screen and (max-width: 600px) {
+    .petanque-content-home {
+        margin: 3vh;
+    }
+
+    .help {
+        right: 1vh;
+        bottom: 1vh;
+        z-index: 99;
+    }
+
+    .copyright {
+        bottom: 1vh;
+    }
+
+    .icon {
+        width: 5vw;
+    }
+    
+    
 }

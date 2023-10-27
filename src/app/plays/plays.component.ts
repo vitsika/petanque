@@ -6,6 +6,8 @@ import { GameEnum } from '../model/game.enum';
 import { Game, TournamentResult } from '../model/tournamentResult';
 import { TournamentService } from '../service/tournament.service';
 import { Subscription } from 'rxjs';
+import { NotificationService } from '../service/notification.service';
+import { NotificationType } from '../model/notificationType';
 
 @Component({
   selector: 'app-plays',
@@ -27,7 +29,7 @@ export class PlaysComponent implements OnInit, OnDestroy {
   filterText:string=""
 
 
-  constructor(private localStorageService: LocalStorageService, private gameService: GameService, private tournamentService: TournamentService) {
+  constructor(private localStorageService: LocalStorageService, private gameService: GameService, private tournamentService: TournamentService, private notificationService:NotificationService) {
 
 
 
@@ -158,6 +160,12 @@ export class PlaysComponent implements OnInit, OnDestroy {
       this.gameService.nextGame(newStep)
       this.localStorageService.setField("gameStep", newStep)
       this.gameService.setStep(newStep)        
+      }else{
+        this.notificationService.openNotification({
+          message: "Concours terminé, veuillez trouver le récap dans l'onglet CLASSEMENT",
+          actionText: 'Fermer',
+          type: NotificationType.SUCCESS,
+        })
       }
      
     }
