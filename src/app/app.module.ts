@@ -14,6 +14,7 @@ import {MatCardModule} from '@angular/material/card';
 import { PlayComponent } from './play/play.component';
 import { HomeComponent } from './home/home.component';
 import { InfoModalComponent } from './info-modal/info-modal.component';
+import { PendingComponent } from './pending/pending.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { InfoModalComponent } from './info-modal/info-modal.component';
     ConfirmModalComponent,
     PlayComponent,
     HomeComponent,
-    InfoModalComponent
+    InfoModalComponent,
+    PendingComponent
   ],
   imports: [
     BrowserModule,
