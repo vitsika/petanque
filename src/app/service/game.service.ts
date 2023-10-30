@@ -194,8 +194,39 @@ export class GameService {
   nextGame = (step:string) => {
     var tournament:TournamentResult =this.localStorageService.getField("tournament")
     var teamsId = tournament.fourWin!.concat(tournament.threeWin!.concat(tournament.twoWin!.concat(tournament.oneWin!.concat(tournament.noWin!))))
+    var lastExempteds : number[]= []
+    if (tournament.game1){
+      lastExempteds.push(tournament.game1.exempt!.team)
+    }
+    
+    if (tournament.game2){
+      lastExempteds.push(tournament.game2.exempt!.team)
+    }
+    
+    if (tournament.game3){
+      lastExempteds.push(tournament.game3.exempt!.team)
+    }
+    
+    if (tournament.game4){
+      lastExempteds.push(tournament.game4.exempt!.team)
+    }
+
     var exemptedTeam!: Team
     if (teamsId.length % 2 != 0) {
+      //select exemtedTeam - prevent twice selection of exempted team
+      var exemptedId = teamsId[teamsId.length-1]
+      var foundExempted = false
+      var i =0
+      while (!foundExempted && i<teamsId.length-1 ){
+        if (lastExempteds.includes(exemptedId)){
+          i++
+          exemptedId = teamsId[teamsId.length-1-i+1]
+        }else{
+          foundExempted = true
+        }
+      }
+      teamsId.splice(teamsId.indexOf(exemptedId),1)
+      teamsId.push(exemptedId)
       teamsId.push(-99)
     }
 
