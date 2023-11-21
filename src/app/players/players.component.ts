@@ -32,7 +32,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
   playerServiceSub$!: Subscription
 
   columnDefs: ColDef[] = [
-    { headerName: 'Equipe', field: 'team', headerCheckboxSelection: true },
+    { headerName: 'Equipe', field: 'team', headerCheckboxSelection: true,sort: 'desc'},
     { headerName: 'Joueur1', field: 'player1', editable: true },
     { headerName: 'Joueur2', field: 'player2', editable: true },
     { headerName: 'Joueur3', field: 'player3', editable: true },
@@ -311,7 +311,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
 
   setNewTeams = () => {
     let tmp: Team[] = []
-    this.gridApi.getRenderedNodes().forEach(node => {
+    this.gridApi.forEachNode(node => {
       tmp.push(node.data)
     })
     var newTeams: Teams = {
