@@ -17,10 +17,6 @@
     "electron-build": "ng build && electron .",
     "electron-pack": "electron-builder -c.extraMetadata.main=main.js  --windows nsis:x64",
     "preelectron-pack": "ng build",
-    "gitflow":"npm-gitflow",
-    "gitflow:feature-start":"npm-gitflow feature-start",
-    "gitflow:feature-finish":"npm-gitflow feature-finish"
-
   },
   "build": {
     "appId": "tech.vitsika.petanque",
@@ -38,7 +34,7 @@
     "win": {
       "icon": "dist/petanque/assets/petanque.png",
       "certificateFile": "\\\\NAS-Vitsika\\Vitsika\\Vitsik@\\Projects\\App_security\\vitsika.p12",
-      "publisherName":"${author}"
+      "publisherName": "${author}"
     }
   },
   "private": true,
