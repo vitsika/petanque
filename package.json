@@ -16,7 +16,11 @@
     "electron-dev": "electron .",
     "electron-build": "ng build && electron .",
     "electron-pack": "electron-builder -c.extraMetadata.main=main.js  --windows nsis:x64",
-    "preelectron-pack": "ng build"
+    "preelectron-pack": "ng build",
+    "gitflow":"npm-gitflow",
+    "gitflow:feature-start":"npm-gitflow feature-start",
+    "gitflow:feature-finish":"npm-gitflow feature-finish"
+
   },
   "build": {
     "appId": "tech.vitsika.petanque",
