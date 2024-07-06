@@ -153,6 +153,24 @@ export class PlayersComponent implements OnInit, OnDestroy {
   }
 
   onAddPlayer = () => {
+    var teams = this.localStorageService.getTeams()
+    if (teams){
+      var emptyName = this.isEmptyName(teams.allTeams)
+      if (!emptyName){
+       this.addTeam()
+      }else{
+        this.notificationService.openNotification({
+          message: 'Au moins un nom de joueur n\'est pas rempli, veuillez corriger (en appyant sur entrée pour sauvegarder) avant d\'ajouter une nouvelle équipe',
+          actionText: 'Fermer',
+          type: NotificationType.ERROR,
+        })
+      }
+    }else{
+      this.addTeam()
+    }
+  }
+
+  addTeam  = () => {
     var newTeam: Team = {
       team: -1,
       player1: "",
@@ -174,8 +192,8 @@ export class PlayersComponent implements OnInit, OnDestroy {
     this.gridApi.applyTransaction({ add: [newTeam] })
     this.localStorageService.addTeam(newTeam)
     this.setEnableGame()
-
   }
+
 
   
   onRemoveAll = () => {
@@ -298,6 +316,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
         type: NotificationType.WARNING,
       })
     }
+    
     this.setEnableGame()
 
   }
