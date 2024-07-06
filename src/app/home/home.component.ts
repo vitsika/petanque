@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
   }
 
   checkIfEvalVersionExpired = () => {
-    var endEvalDate = new Date("2023-12-3")
+    var endEvalDate = new Date("2024-12-3")
     endEvalDate.setHours(23,59,0,0)
     var todayDate = new Date()
     return endEvalDate < todayDate
