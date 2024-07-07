@@ -13,6 +13,8 @@ import { GameService } from '../service/game.service';
 import { GameEnum } from '../model/game.enum';
 import { TournamentInfo } from '../model/tournamentInfo';
 import { ReloadService } from '../service/reload.service';
+import { MINIMUM_TEAMS } from '../constant/game-constant';
+import { FileService } from '../service/file.service';
 
 @Component({
   selector: 'app-players',
@@ -61,7 +63,8 @@ export class PlayersComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private enableGameService: EnableGameService,
     private gameService: GameService,
-    private reloadService: ReloadService) {
+    private reloadService: ReloadService,
+    private fileService: FileService) {
     this.playerServiceSub$ = this.playerService.getTeams().subscribe(teams => {
       if (teams) {
         this.rowData = teams.allTeams
@@ -356,7 +359,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
     var teams = this.localStorageService.getTeams()
     if (teams) {
       emptyName = this.isEmptyName(teams.allTeams)
-      if (teams.allTeams.length > 6 && !emptyName) { 
+      if (teams.allTeams.length > MINIMUM_TEAMS && !emptyName) { 
         enableGame = true
         this.enableGenerateGame = true
       }
@@ -392,5 +395,9 @@ export class PlayersComponent implements OnInit, OnDestroy {
     return emptyName
   }
 
+
+  exportTournament = () => {
+    this.fileService.exportTournament()
+  }
 
 }

@@ -154,8 +154,8 @@ export class PlayComponent implements OnInit, OnDestroy {
     
     // Update allTeams in storage
     var players = this.localStorageService.getTeams()
-    this.switchWinLost(players)
-    this.switchScoreAndGoalAverage(players)
+    this.gameService.switchWinLost(players, this.game)
+    this.gameService.switchScoreAndGoalAverage(players, this.enableSwitch, this.game)
 
      // display change on card
     var oldT1Score = this.game.team1?.score
@@ -163,18 +163,12 @@ export class PlayComponent implements OnInit, OnDestroy {
     this.game.team1!.score = oldT2Score!
     this.game.team2!.score = oldT1Score!
 
-    var newTournament = this.gameService.updateTournament(this.game,this.enableSwitch)
-    //this.gameService.updateTournamentWinArray(newTournament)
     //update tournamentResults
-    this.switchTournamentWin(newWinner, newLooser)
-
-    //update current game sort
-
-
-
-
+    this.gameService.updateTournament(this.game,this.enableSwitch)
+    this.gameService.switchTournamentWin(newWinner, newLooser)
     var tournamentResult: TournamentResult = this.localStorageService.getField("tournament")
     var step = this.localStorageService.getField("gameStep")
+
     //update tournament game
     type ObjectKey = keyof typeof tournamentResult;
     // @ts-ignore
@@ -215,124 +209,11 @@ export class PlayComponent implements OnInit, OnDestroy {
 
 
 
-  switchTournamentWin = (newWinner:number, newLooser:number) => {
-    var tournamentResult: TournamentResult = this.localStorageService.getField("tournament")
-    //NEW WINNER
-    if (tournamentResult.noWin?.includes(newWinner)){
-      var newNoWin = tournamentResult.noWin.filter(item => item !== newWinner);
-      tournamentResult.noWin = newNoWin
-      tournamentResult.oneWin?.push(newWinner)
-    }else if (tournamentResult.oneWin?.includes(newWinner)){
-      var newOneWin = tournamentResult.oneWin.filter(item => item !== newWinner);
-      tournamentResult.oneWin = newOneWin
-      tournamentResult.twoWin?.push(newWinner)
-    }else if (tournamentResult.twoWin?.includes(newWinner)){
-      var newTwoWin = tournamentResult.twoWin.filter(item => item !== newWinner);
-      tournamentResult.twoWin = newTwoWin
-      tournamentResult.threeWin?.push(newWinner)
-    }
-    else if (tournamentResult.threeWin?.includes(newWinner)){
-      var newThreeWin = tournamentResult.threeWin.filter(item => item !== newWinner);
-      tournamentResult.threeWin = newThreeWin
-      tournamentResult.fourWin?.push(newWinner)
-    }
-
-    //NEW LOOSER
-     if (tournamentResult.oneWin?.includes(newLooser)){
-      var newOneWin = tournamentResult.oneWin.filter(item => item !== newLooser);
-      tournamentResult.oneWin = newOneWin
-      tournamentResult.noWin?.push(newLooser)
-    }else if (tournamentResult.twoWin?.includes(newLooser)){
-      var newTwoWin = tournamentResult.twoWin.filter(item => item !== newLooser);
-      tournamentResult.twoWin = newTwoWin
-      tournamentResult.oneWin?.push(newLooser)
-    }
-    else if (tournamentResult.threeWin?.includes(newLooser)){
-      var newThreeWin = tournamentResult.threeWin.filter(item => item !== newLooser);
-      tournamentResult.threeWin = newThreeWin
-      tournamentResult.twoWin?.push(newLooser)
-    }
-    else if (tournamentResult.fourWin?.includes(newLooser)){
-      var newForWin = tournamentResult.fourWin.filter(item => item !== newLooser);
-      tournamentResult.fourWin = newForWin
-      tournamentResult.threeWin?.push(newLooser)
-    }
-
-    this.localStorageService.setField("tournament",tournamentResult)
-  }
+  
 
 
-  switchScoreAndGoalAverage = (players:Teams) =>{
-    var team1ScoreDiff:number ,team2ScoreDiff:number,team1NewScore:number,team2NewScore:number= 0
-    if (this.enableSwitch =="game1"){
-      team1NewScore = this.game.team2!.score
-      team2NewScore = this.game.team1!.score
-      players.allTeams.filter(team => team.team==this.game.team1!.teamId).forEach(team => {
-        team.score = team1NewScore
-        team.goalAverage = -1*team.goalAverage
-      
-      })
-      players.allTeams.filter(team => team.team==this.game.team2!.teamId).forEach(team => {
-        team.score = team2NewScore
-        team.goalAverage = -1*team.goalAverage
-      })
-    }else{
-      var diffScore = Math.abs(this.game.team1!.score - this.game.team2!.score) 
-      if (this.game.winner == this.game.team1!.teamId){//team1 new winner 
-        players.allTeams.filter(team => team.team==this.game.team1!.teamId).forEach(team => {
-          team.score = team.score + diffScore
-          team.goalAverage = team.goalAverage + diffScore
-        })
-        players.allTeams.filter(team => team.team==this.game.team2!.teamId).forEach(team => {
-          team.score = team.score - diffScore
-          team.goalAverage = team.goalAverage - diffScore
-        })
+  
 
-      }else{
-
-        players.allTeams.filter(team => team.team==this.game.team1!.teamId).forEach(team => {
-          team.score = team.score - diffScore
-          team.goalAverage = team.goalAverage - diffScore
-        })
-        players.allTeams.filter(team => team.team==this.game.team2!.teamId).forEach(team => {
-          team.score = team.score + diffScore
-          team.goalAverage = team.goalAverage + diffScore
-        })
-        
-      }
-    }
-    this.localStorageService.setTeams(players)
-
-  }
-
-  switchWinLost = (players:Teams) =>{
-    var team1Lost:number ,team1Win:number,team2Lost:number,team2Win:number= 0
-    if (this.game.winner == this.game.team1!.teamId){
-      team1Lost = -1
-      team1Win = +1      
-
-      team2Lost = 1
-      team2Win = -1    
-
-    }else{ //team2 winner now
-      team1Lost = 1
-      team1Win = -1
-      team2Lost = -1
-      team2Win = 1
-    }
-
-    players.allTeams.filter(team => team.team==this.game.team1!.teamId).forEach(team => {
-      team.lost = team.lost + team1Lost
-      team.win = team.win + team1Win     
-      
-    })
-    players.allTeams.filter(team => team.team==this.game.team2!.teamId).forEach(team => {
-      team.lost = team.lost + team2Lost
-      team.win = team.win + team2Win
-           
-    })
-    this.localStorageService.setTeams(players)
-
-  }
+  
 
 }

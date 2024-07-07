@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LocalStorageService } from '../service/localStorage.service';
 import { formatDate } from '@angular/common';
 import { TournamentInfo } from '../model/tournamentInfo';
@@ -16,7 +16,8 @@ export class HomeComponent implements OnInit {
   tournamentType:string=""
   tournamentName:string=""
   tournamentDate!:any;
-
+  fileContent:string=""
+  @ViewChild("inputValue", { static: false }) inputValue!: ElementRef;
   constructor(private localstorageService:LocalStorageService, private infoService: InfoService,  private notificationService: NotificationService,) { }
 
   ngOnInit(): void {
@@ -55,6 +56,37 @@ export class HomeComponent implements OnInit {
     endEvalDate.setHours(23,59,0,0)
     var todayDate = new Date()
     return endEvalDate < todayDate
+  }
+
+  loadTournament = () => {
+    document!.getElementById("inputValue")!.click();
+  }
+
+  handle(input:any) {
+    console.log("Change input file");
+    var tempFile:any;
+    tempFile = document.getElementById("inputValue");
+    console.log(tempFile.value)
+    console.log(input.files)
+
+    if (input.files && input.files[0]) {
+      console.log("yryr")
+      let self = this;
+      var reader = new FileReader();
+      reader.readAsText(input.files[0])
+      reader.onloadend = (e: any) => {
+        var tournamentJson = JSON.parse(e.target.result)
+        Object.entries(tournamentJson).forEach((entry) => {
+          const [key, value] = entry;
+          this.localstorageService.setField(key,value)
+          var tournamentInfo = this.localstorageService.getField("tournamentInfo")
+          this.infoService.setInfo(tournamentInfo)
+        });
+
+
+      }
+    }
+
   }
 
 }

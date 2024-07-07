@@ -10,6 +10,7 @@ import { ReloadService } from './service/reload.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { InfoModalComponent } from './info-modal/info-modal.component';
+import { MINIMUM_TEAMS } from './constant/game-constant';
 
 @Component({
   selector: 'app-root',
@@ -65,7 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
     disableClose: true,
     data: {
       title: 'INFORMATION',
-      content: 'Cet outil sert à générer aléatoirement des parties lors d\'un coucncours de pétanque en 4 parties.<br/>Les règles sont les suivantes: <ul><li>les parties ne peuvent commencer que si il y a au moins 6 équipes.</li><li>Si le nombre d\'équipe est impair, on tire au sort une équipe qui sera exempte pour chaque partie. Léquipe tirée au sort sera la gagnante avec un score de 13 à 0.</li><li>Pour chaque partie, si le nombre d\'équipe gagnante ou perdante est impair, l\'équipe gagnante avec le plus faible "goal average" rencontrera l\'équipe perdante avec le plus haut "goal average".</li><li> Le système de classement sera fait en fonction du nombre de victoire. Si plusieurs équipes ont le même nombre de victoire, le classement sera basé sur le "goal average".</li></ul><br/>Cette application utilise le stockage de votre navigateur, si vous supprimez les données de votre navigateur, vous pouvez perdre les données relatives au concours! <br/><br/><b>Bonnes parties!!</b>'
+      content: 'Cet outil sert à générer aléatoirement des parties lors d\'un coucncours de pétanque en 4 parties.<br/>Les règles sont les suivantes: <ul><li>les parties ne peuvent commencer que si il y a au moins '+ MINIMUM_TEAMS +' équipes.</li><li>Si le nombre d\'équipe est impair, on tire au sort une équipe qui sera exempte pour chaque partie. Léquipe tirée au sort sera la gagnante avec un score de 13 à 0.</li><li>Pour chaque partie, si le nombre d\'équipe gagnante ou perdante est impair, l\'équipe gagnante avec le plus faible "goal average" rencontrera l\'équipe perdante avec le plus haut "goal average".</li><li> Le système de classement sera fait en fonction du nombre de victoire. Si plusieurs équipes ont le même nombre de victoire, le classement sera basé sur le "goal average".</li></ul><br/>Cette application utilise le stockage de votre navigateur, si vous supprimez les données de votre navigateur, vous pouvez perdre les données relatives au concours! <br/><br/><b>Bonnes parties!!</b>'
       
       
     },

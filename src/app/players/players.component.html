@@ -1,6 +1,12 @@
 
 <div class="player" id="player" >
-    <p class="info">{{tournamentInfo.name}} - {{tournamentInfo.type}} - {{tournamentInfo.date}}</p>
+    <p class="info">
+        <button mat-icon-button matTooltip="export le concours"  color="accent" matTooltipPosition="above" (click)="exportTournament()"  style="margin: 0 0.5vh 0 0" >
+            <mat-icon class="app-icon" >save_alt</mat-icon>
+        </button>
+        {{tournamentInfo.name}} - {{tournamentInfo.type}} - {{tournamentInfo.date}}</p>
+    
+    
     <div id="gridController" class="grid-controller">
         <button matTooltip="Ajouter une équipe" matTooltipPosition="above" mat-icon-button (click)="onAddPlayer()"[disabled]="!enableAddPlayer"  style="margin: 0 0.5vh 0 0">
             <mat-icon class="app-icon">person_add</mat-icon>
@@ -10,7 +16,8 @@
         </button> 
         <button mat-icon-button matTooltip="Réinitialiser le concours"  matTooltipPosition="above" (click)="onRemoveAll()"  style="margin: 0 0.5vh 0 0" >
             <mat-icon class="app-icon" >restart_alt</mat-icon>
-        </button> 
+        </button>
+        
        
     </div>
     <div class="game-button">

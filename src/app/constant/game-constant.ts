@@ -1,0 +1,1 @@
+export const MINIMUM_TEAMS = 6;
