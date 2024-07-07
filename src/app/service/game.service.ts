@@ -56,6 +56,7 @@ export class GameService {
       exempt: exemptedTeam
     }
     this.localStorageService.saveGameResults(gameResults)
+    this.localStorageService.setField("gameEnd", false)
   }
 
 

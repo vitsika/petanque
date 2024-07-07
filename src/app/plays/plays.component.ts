@@ -8,6 +8,7 @@ import { TournamentService } from '../service/tournament.service';
 import { Subscription } from 'rxjs';
 import { NotificationService } from '../service/notification.service';
 import { NotificationType } from '../model/notificationType';
+import { SwitchResultEnablerService } from '../service/switchResult.service';
 
 @Component({
   selector: 'app-plays',
@@ -29,7 +30,7 @@ export class PlaysComponent implements OnInit, OnDestroy {
   filterText:string=""
 
 
-  constructor(private localStorageService: LocalStorageService, private gameService: GameService, private tournamentService: TournamentService, private notificationService:NotificationService) {
+  constructor(private localStorageService: LocalStorageService, private gameService: GameService, private tournamentService: TournamentService, private notificationService:NotificationService, private enableSwitchService: SwitchResultEnablerService) {
 
 
 
@@ -60,6 +61,7 @@ export class PlaysComponent implements OnInit, OnDestroy {
 
     }
     this.setNextButton(this.localStorageService.getField("tournament"))
+    this.enableSwitchResultHandler()
 
 
   }
@@ -69,6 +71,7 @@ export class PlaysComponent implements OnInit, OnDestroy {
     this.games = this.tournament = this.localStorageService.getField("tournament")[newStep]!.games || []
     this.disableGameOption(newStep)
     this.selectedStep = newStep
+    this.enableSwitchResultHandler()
   }
 
   setDefaultStep = (step: string) => {
@@ -112,6 +115,7 @@ export class PlaysComponent implements OnInit, OnDestroy {
         gameOver = false
       }
     })
+
     return gameOver
   }
 
@@ -122,7 +126,19 @@ export class PlaysComponent implements OnInit, OnDestroy {
         gameLocked = false
       }
     })
+   
     return gameLocked
+  }
+
+  enableSwitchResultHandler = () => {
+
+    this.enableSwitchService.enableSwitch("")
+    // enable switch result for only the previous game
+    if ((this.gameStep=="game2" && this.selectedStep=="game1") || (this.gameStep=="game3" && this.selectedStep=="game2" ) || (this.gameStep=="game4" && this.selectedStep=="game3" ) ){
+      this.enableSwitchService.enableSwitch(this.selectedStep)
+    }
+   
+    
   }
 
   ngOnDestroy() {
@@ -166,6 +182,7 @@ export class PlaysComponent implements OnInit, OnDestroy {
           actionText: 'Fermer',
           type: NotificationType.SUCCESS,
         })
+        this.localStorageService.setField("gameEnd", true)
       }
      
     }

@@ -356,7 +356,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
     var teams = this.localStorageService.getTeams()
     if (teams) {
       emptyName = this.isEmptyName(teams.allTeams)
-      if (teams.allTeams.length > 6 && !emptyName) {
+      if (teams.allTeams.length > 6 && !emptyName) { 
         enableGame = true
         this.enableGenerateGame = true
       }
