@@ -1,0 +1,42 @@
+{
+    "teams": [
+      {
+        "team": 1,
+        "player1": "toto",
+        "player2": "titi",
+        "gamePlayed":0,
+        "win":0,
+        "lost":0,
+        "score": 0
+      },
+      {
+        "team": 2,
+        "player1": "tata",
+        "player2": "tete",
+        "gamePlayed":0,
+        "win":0,
+        "lost":0,
+        "score": 0
+      },
+      {
+        "team": 3,
+        "player1": "baba",
+        "player2": "bebe",
+        "gamePlayed":0,
+        "win":0,
+        "lost":0,
+        "score": 0
+      },
+      {
+        "team": 4,
+        "player1": "bobo",
+        "player2": "bibi",
+        "gamePlayed":0,
+        "win":0,
+        "lost":0,
+        "score": 0
+      }
+
+    ]
+  }
+      

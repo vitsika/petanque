@@ -1,0 +1,104 @@
+@import './lib/colors.scss';
+
+.petanque-content {
+    //margin: 5vw;
+    //border: solid;
+    //border-width: 1px;
+    //border-color: $ds-yellow-90;
+    height: auto;
+    width: auto;
+    // background-color: lightgray;
+    box-shadow: rgb(13, 14, 14) 0px 20px 30px -10px;
+    //border-radius:5px
+}
+
+
+.petanque-content-home {
+    margin: 15vh;
+    //border: solid;
+    //border-width: 1px;
+    border-color: $ds-yellow-90;
+    height: auto;
+    width: auto;
+    box-shadow: rgb(13, 14, 14) 0px 20px 30px -10px;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    display: flex;
+}
+
+
+
+.mat-tab-list .mat-tab-labels .mat-tab-label-active {
+    background-color: $ds-orange-60;
+    color: white !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    opacity: 1 !important;
+}
+
+.mat-tab-list {
+    .mat-ink-bar {
+        display: none;
+    }
+}
+
+.mat-tab-body-wrapper {
+    height: 85vh;
+}
+
+.plays-component {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 2vw;
+}
+
+.help {
+    position: absolute;
+    right: 3vh;
+    bottom: 3vh;
+    z-index: 99;
+}
+
+.copyright {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 3vh;
+    text-align: center;
+}
+
+.icon {
+    width: 1.5vw;
+}
+
+.app-icon-help {
+    transform: scale(1.5);
+}
+
+@media only screen and (max-width: 600px) {
+    .petanque-content-home {
+        margin: 3vh;
+    }
+
+    .help {
+        right: 1vh;
+        bottom: 1vh;
+        z-index: 99;
+    }
+
+    .copyright {
+        bottom: 1vh;
+    }
+
+    .icon {
+        width: 5vw;
+    }
+    
+    
+}

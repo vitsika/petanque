@@ -1,0 +1,29 @@
+<div class="petanque-content" *ngIf="infoSet">
+  <mat-tab-group backgroundColor="primary" (selectedIndexChange)="onTabChanged($event)">
+    <mat-tab label="Joueurs"> <app-players></app-players> </mat-tab>
+    <mat-tab label="Parties" [disabled]="!enableGames"> <app-plays class="plays-component"></app-plays> </mat-tab>
+    <mat-tab label="Classement" [disabled]="!enableGames"> <app-summary></app-summary> </mat-tab>
+  </mat-tab-group>
+</div>
+
+<div class="petanque-content-home" *ngIf="!infoSet">
+  <app-home></app-home>
+</div>
+
+
+<div class="copyright">
+  <span>&copy; Vitsik@ - 2023 </span>
+  <a href="https://vitsika.tech" target="_blank" rel="noopener noreferrer"><img class="icon"
+      src="assets/logo_Vitsik@.png" /></a>
+
+</div>
+
+
+<div class="help">
+  <button matTooltip="Information" mat-icon-button>
+    <mat-icon (click)="onClickInfo()" class="app-icon-help" style="color: #FF7700;">info</mat-icon>
+  </button>
+  <button matTooltip="Information" mat-icon-button>
+    <mat-icon (click)="onClickHelp()" class="app-icon-help" style="color: #FF7700;">contact_support</mat-icon>
+  </button>
+</div>

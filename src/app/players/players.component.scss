@@ -1,0 +1,49 @@
+.ag-header-group-cell-label {
+  justify-content: center !important;
+}
+
+.ag-header-cell-label {
+  justify-content: center !important;
+}
+
+.grid-controller {
+  display: flex;
+  justify-content: center;
+}
+
+.info {
+  text-align: end;
+  margin-right: 3vh;
+  font-family: cursive;
+  text-decoration: underline;
+  text-transform: capitalize;
+}
+
+
+
+.app-icon {
+  transform: scale(1.10);
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+}
+
+.game-button {
+  display: flex;
+  align-items: center;
+  align-self: center;
+}
+
+.start-game-button {
+  margin: 0 0.5vh 0 0;
+  border: solid;
+  border-width: 1px;
+  border-color: #FF7700;
+}
+
+.player-grid{
+  height: 65vh; 
+  margin: 2vw;
+}

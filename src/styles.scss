@@ -1,0 +1,70 @@
+@import '@angular/material/theming';
+@import './app/lib/colors.scss';
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+@include mat-core();
+
+$ds-mat-primary: mat-palette($ds-primary, Main, Light, Dark);
+$ds-mat-accent: mat-palette($ds-accent, Main, Light, Dark);
+$ds-mat-warn: mat-palette($ds-red, Main, Light, Dark);
+$ds-mat-theme: mat-light-theme($ds-mat-primary, $ds-mat-accent, $ds-mat-warn);
+@include angular-material-theme($ds-mat-theme);
+
+
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  //font-size: 1.1rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-size: 1rem;
+}
+
+div {
+  font-family: Roboto, sans-serif;
+}
+
+.error-notification {
+  background: $ds-red-50;
+  .mat-simple-snackbar-action {
+    color: white !important;
+}
+}
+
+.warning-notification {
+  background: $ds-orange-70;
+  .mat-simple-snackbar-action {
+    color: white !important;
+}
+}
+
+.success-notification {
+  background: $ds-green-60;
+}
+
+.info-notification {
+  background: $ds-cool-grey-90;
+}
+
+.mat-tooltip {
+  font-size: 1rem !important;
+}
+
+.mat-button-toggle-group,
+.mat-input-element{
+  font-size: larger !important;
+}

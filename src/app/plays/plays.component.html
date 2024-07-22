@@ -1,0 +1,35 @@
+
+<div>
+    <mat-form-field  appearance="outline" style="margin: 0.5vh;">
+        <mat-label>PARTIE</mat-label>
+        <mat-select [value]="defaultStep"  (selectionChange)="onGameChange($event)">
+          <mat-option *ngFor="let step of gameSteps" [value]="step" [disabled]="disableGameOption(step)">{{step}}</mat-option>         
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field style="margin: 0.5vh;" appearance="outline">
+        <mat-label>Chercher par nom/équipe</mat-label>
+        <input matInput placeholder="Chercher"  type="search" [(ngModel)]="filterText" (ngModelChange)="onFilterValueChange($event)" >
+        <button mat-icon-button matSuffix (click)="onFilterClick()">
+          <mat-icon>{{filterEmpty ? 'search' : 'cancel'}}</mat-icon>
+          </button>
+      </mat-form-field>
+</div>
+
+<div class="game-component">
+    <div *ngFor="let game of games;let indexOfelement=index;">
+        <app-play [game]="game" [selectedStep]="selectedStep" [index]="indexOfelement+1" ></app-play>
+    </div>
+</div>
+
+
+
+<div class="next-game">
+  <button mat-fab color="accent" [disabled]="disableNextButton" (click)="goNext()"  matTooltip="MATCH SUIVANT">
+    <mat-icon>start</mat-icon>
+  </button>
+</div>
+
+
+
+
+

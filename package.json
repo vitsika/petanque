@@ -1,0 +1,73 @@
+{
+  "name": "petanque",
+  "version": "1.0.2-SNAPSHOT",
+  "main": "main.js",
+  "description": "Logiciel de concours de pétanque",
+  "author": "Vitsik@",
+  "license": "MIT",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve -o",
+    "start-mobile": "ng serve --host 0.0.0.0",
+    "start-electron": "electron-forge start",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "electron-dev": "electron .",
+    "electron-build": "ng build && electron .",
+    "electron-pack": "electron-builder -c.extraMetadata.main=main.js  --windows nsis:x64",
+    "preelectron-pack": "ng build"
+  },
+  "build": {
+    "appId": "tech.vitsika.petanque",
+    "productName": "Pétanque (Vitsik@)",
+    "copyright": "Copyright © 2020 ${author}",
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "icon": "dist/petanque/assets/petanque.png",
+      "certificateFile": "\\\\NAS-Vitsika\\Vitsika\\Vitsik@\\Projects\\App_security\\vitsika.p12",
+      "publisherName": "${author}"
+    }
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^14.2.0",
+    "@angular/common": "^14.2.0",
+    "@angular/compiler": "^14.2.0",
+    "@angular/core": "^14.2.0",
+    "@angular/forms": "^14.2.0",
+    "@angular/material": "^14.2.2",
+    "@angular/platform-browser": "^14.2.0",
+    "@angular/platform-browser-dynamic": "^14.2.0",
+    "@angular/router": "^14.2.0",
+    "ag-grid-angular": "^29.0.0",
+    "ag-grid-community": "^29.0.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "rxjs": "~7.5.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.11.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^14.2.4",
+    "@angular/cli": "~14.2.4",
+    "@angular/compiler-cli": "^14.2.0",
+    "@types/jasmine": "~4.0.0",
+    "electron": "^27.0.2",
+    "electron-builder": "^24.6.4",
+    "jasmine-core": "~4.3.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.0.0",
+    "typescript": "~4.7.2"
+  }
+}

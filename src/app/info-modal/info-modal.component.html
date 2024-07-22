@@ -1,0 +1,6 @@
+<div mat-dialog-title class="dialog-title"> {{data.title}}</div>
+<mat-dialog-content [innerHtml]="'<p>' + data.content + '</p>'">
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="close('confirm')">FERMER</button>
+</mat-dialog-actions>
