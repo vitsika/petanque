@@ -187,7 +187,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
     }
     //get allTeams
     var teams = this.localStorageService.getTeams()
-    if (!teams) {
+    if (!teams || teams.allTeams.length==0)  {
       newTeam.team = 1
     } else {
       newTeam.team = this.getMaxTeamNumber(teams.allTeams) + 1
@@ -243,8 +243,24 @@ export class PlayersComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().pipe(first()).subscribe((res) => {
       if (res === 'confirm') {
         this.disableDeletePlayer = false
-        var toRemove = this.gridApi.getSelectedRows()
-        this.gridApi.applyTransaction({ remove: toRemove })
+        var toRemove = this.gridApi.getSelectedRows()     
+        this.gridApi.applyTransaction({ remove: toRemove })   
+        //update teamId
+        var teamToRemoveIds :number[] = []  
+        toRemove.forEach(team => {
+          teamToRemoveIds.push(team.team)          
+        })
+        teamToRemoveIds.forEach (idToremove => {
+          this.gridApi.forEachNode(node => {
+            var currentId = node.data.team
+            if (currentId>idToremove)[
+              node.data.team =  node.data.team -1
+            ]
+          })
+        })      
+        
+
+        //this.gridApi.applyTransaction({ remove: toRemove })
         this.setNewTeams()
         if (this.gridApi.getSelectedRows().length == 0) {
           this.disableDeletePlayer = true
@@ -339,8 +355,10 @@ export class PlayersComponent implements OnInit, OnDestroy {
     var newTeams: Teams = {
       allTeams: tmp
     }
+    console.log(newTeams)
     if (newTeams.allTeams.length == 0) {
-      this.localStorageService!.removeAll()
+      console.log("yes")
+      this.localStorageService.setTeams(newTeams)
     } else {
       this.localStorageService!.setTeams(newTeams)
     }

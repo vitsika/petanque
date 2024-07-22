@@ -1,6 +1,6 @@
 {
   "name": "petanque",
-  "version": "1.0.1-SNAPSHOT",
+  "version": "1.0.2-SNAPSHOT",
   "main": "main.js",
   "description": "Logiciel de concours de pétanque",
   "author": "Vitsik@",
