@@ -1,5 +1,9 @@
 
 <mat-card [ngClass]="setClass()">
+    
+    <button  *ngIf="enableSwitch!='' && !isBot && !gameEnd" mat-icon-button color="red"   matTooltip="Permuter de vainqueur" [matTooltipPosition]="'above'" (click)="switchResult()">
+        <mat-icon>cached</mat-icon>
+    </button>
     <div class="match-number-div"> <p class="match-number-p">Match {{index}}</p></div>
     <mat-form-field appearance="outline"  [matTooltip]="team1Tooltip"  matTooltipPosition="above">
         <mat-label>Equipe {{game.team1!.teamId!}}</mat-label>
@@ -10,6 +14,6 @@
         <input  (keydown.enter)="onCLickButton()" type="number" min="0" max="13" matInput placeholder="Score" [value]="game.team2!.score!" [disabled]="game.gameOver || game.locked"  [(ngModel)]="game.team2!.score">
     </mat-form-field>
     <mat-card-actions align="end">
-        <button  mat-raised-button color="accent" [disabled]="game.gameOver" (click)="onCLickButton()"> {{buttonLabel}} </button>
+        <button  mat-raised-button color="accent" [disabled]="game.gameOver" (click)="onCLickButton()"> {{buttonLabel}} </button>       
     </mat-card-actions>
 </mat-card>

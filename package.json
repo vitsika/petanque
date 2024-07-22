@@ -1,6 +1,6 @@
 {
   "name": "petanque",
-  "version": "1.0.0",
+  "version": "1.0.2-SNAPSHOT",
   "main": "main.js",
   "description": "Logiciel de concours de pétanque",
   "author": "Vitsik@",
@@ -16,7 +16,7 @@
     "electron-dev": "electron .",
     "electron-build": "ng build && electron .",
     "electron-pack": "electron-builder -c.extraMetadata.main=main.js  --windows nsis:x64",
-    "preelectron-pack": "ng build",
+    "preelectron-pack": "ng build"
   },
   "build": {
     "appId": "tech.vitsika.petanque",

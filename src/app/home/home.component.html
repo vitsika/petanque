@@ -14,4 +14,7 @@
     
   
     <button mat-raised-button color="accent" class="form-element" [disabled]="disableButton()" (click)="createTournament()"> CREER UN CONCOURS</button>
+    <button mat-raised-button color="accent" class="form-element"  (click)="loadTournament()"> CHARGER UN CONCOURS
+        <input id="inputValue" type="file" style="display:none" (change)="handle($event.target)">
+    </button>
 </div>

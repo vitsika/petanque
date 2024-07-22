@@ -13,6 +13,8 @@ import { GameService } from '../service/game.service';
 import { GameEnum } from '../model/game.enum';
 import { TournamentInfo } from '../model/tournamentInfo';
 import { ReloadService } from '../service/reload.service';
+import { MINIMUM_TEAMS } from '../constant/game-constant';
+import { FileService } from '../service/file.service';
 
 @Component({
   selector: 'app-players',
@@ -61,7 +63,8 @@ export class PlayersComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private enableGameService: EnableGameService,
     private gameService: GameService,
-    private reloadService: ReloadService) {
+    private reloadService: ReloadService,
+    private fileService: FileService) {
     this.playerServiceSub$ = this.playerService.getTeams().subscribe(teams => {
       if (teams) {
         this.rowData = teams.allTeams
@@ -153,6 +156,24 @@ export class PlayersComponent implements OnInit, OnDestroy {
   }
 
   onAddPlayer = () => {
+    var teams = this.localStorageService.getTeams()
+    if (teams){
+      var emptyName = this.isEmptyName(teams.allTeams)
+      if (!emptyName){
+       this.addTeam()
+      }else{
+        this.notificationService.openNotification({
+          message: 'Au moins un nom de joueur n\'est pas rempli, veuillez corriger (en appyant sur entrée pour sauvegarder) avant d\'ajouter une nouvelle équipe',
+          actionText: 'Fermer',
+          type: NotificationType.ERROR,
+        })
+      }
+    }else{
+      this.addTeam()
+    }
+  }
+
+  addTeam  = () => {
     var newTeam: Team = {
       team: -1,
       player1: "",
@@ -166,7 +187,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
     }
     //get allTeams
     var teams = this.localStorageService.getTeams()
-    if (!teams) {
+    if (!teams || teams.allTeams.length==0)  {
       newTeam.team = 1
     } else {
       newTeam.team = this.getMaxTeamNumber(teams.allTeams) + 1
@@ -174,8 +195,8 @@ export class PlayersComponent implements OnInit, OnDestroy {
     this.gridApi.applyTransaction({ add: [newTeam] })
     this.localStorageService.addTeam(newTeam)
     this.setEnableGame()
-
   }
+
 
   
   onRemoveAll = () => {
@@ -222,8 +243,24 @@ export class PlayersComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().pipe(first()).subscribe((res) => {
       if (res === 'confirm') {
         this.disableDeletePlayer = false
-        var toRemove = this.gridApi.getSelectedRows()
-        this.gridApi.applyTransaction({ remove: toRemove })
+        var toRemove = this.gridApi.getSelectedRows()     
+        this.gridApi.applyTransaction({ remove: toRemove })   
+        //update teamId
+        var teamToRemoveIds :number[] = []  
+        toRemove.forEach(team => {
+          teamToRemoveIds.push(team.team)          
+        })
+        teamToRemoveIds.forEach (idToremove => {
+          this.gridApi.forEachNode(node => {
+            var currentId = node.data.team
+            if (currentId>idToremove)[
+              node.data.team =  node.data.team -1
+            ]
+          })
+        })      
+        
+
+        //this.gridApi.applyTransaction({ remove: toRemove })
         this.setNewTeams()
         if (this.gridApi.getSelectedRows().length == 0) {
           this.disableDeletePlayer = true
@@ -298,6 +335,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
         type: NotificationType.WARNING,
       })
     }
+    
     this.setEnableGame()
 
   }
@@ -317,8 +355,10 @@ export class PlayersComponent implements OnInit, OnDestroy {
     var newTeams: Teams = {
       allTeams: tmp
     }
+    console.log(newTeams)
     if (newTeams.allTeams.length == 0) {
-      this.localStorageService!.removeAll()
+      console.log("yes")
+      this.localStorageService.setTeams(newTeams)
     } else {
       this.localStorageService!.setTeams(newTeams)
     }
@@ -337,7 +377,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
     var teams = this.localStorageService.getTeams()
     if (teams) {
       emptyName = this.isEmptyName(teams.allTeams)
-      if (teams.allTeams.length > 6 && !emptyName) {
+      if (teams.allTeams.length > MINIMUM_TEAMS && !emptyName) { 
         enableGame = true
         this.enableGenerateGame = true
       }
@@ -373,5 +413,9 @@ export class PlayersComponent implements OnInit, OnDestroy {
     return emptyName
   }
 
+
+  exportTournament = () => {
+    this.fileService.exportTournament()
+  }
 
 }
