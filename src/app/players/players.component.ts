@@ -355,9 +355,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
     var newTeams: Teams = {
       allTeams: tmp
     }
-    console.log(newTeams)
     if (newTeams.allTeams.length == 0) {
-      console.log("yes")
       this.localStorageService.setTeams(newTeams)
     } else {
       this.localStorageService!.setTeams(newTeams)
