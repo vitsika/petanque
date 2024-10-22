@@ -83,9 +83,7 @@ export class AppComponent implements OnInit, OnDestroy {
     disableClose: true,
     data: {
       title: 'CONTACT',
-      content: 'Pour toutes questions et renseignements, veuillez nous contacter au: <ul><li> Téléphone: +33665973682 </li><li> Mail:<a href="mailto:contact@vitsika.tech">contact@vitsika.tech</a></li><li> Site:<a href="https://vitsika.tech">https://vitsika.tech</a></li></ul> '
-      
-      
+      content: 'Pour toutes questions et renseignements, veuillez nous contacter au: <ul><li> Téléphone: +33665973682 </li><li> Mail:<a href="mailto:contact@petanque-4parties.fr">contact@petanque-4parties.fr</a></li><li> Site:<a href="https://vitsika.tech">https://vitsika.tech</a></li></ul> '  
     },
   })
  }
