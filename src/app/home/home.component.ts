@@ -63,14 +63,10 @@ export class HomeComponent implements OnInit {
   }
 
   handle(input:any) {
-    console.log("Change input file");
     var tempFile:any;
     tempFile = document.getElementById("inputValue");
-    console.log(tempFile.value)
-    console.log(input.files)
 
     if (input.files && input.files[0]) {
-      console.log("yryr")
       let self = this;
       var reader = new FileReader();
       reader.readAsText(input.files[0])
