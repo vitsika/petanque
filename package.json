@@ -11,6 +11,7 @@
     "start-mobile": "ng serve --host 0.0.0.0",
     "start-electron": "electron-forge start",
     "build": "ng build",
+    "build-for-online": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "electron-dev": "electron .",
